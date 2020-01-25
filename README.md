@@ -7,7 +7,7 @@ version: "3.7"
 
 services:
   swarm-launcher:
-    image: ix-ai/swarm-launcher:dev-master
+    image: ixdotai/swarm-launcher:dev-master
     environment:
       LAUNCH_IMAGE: ix-ai/tinc:latest
       LAUNCH_PULL: "true"
