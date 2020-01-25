@@ -2,7 +2,7 @@
 # pull latest image version
 if [ "$LAUNCH_PULL" = true ]; then
     echo "Pulling $LAUNCH_IMAGE: docker pull $LAUNCH_IMAGE"
-    docker pull $LAUNCH_IMAGE
+    docker pull "$LAUNCH_IMAGE"
 fi
 
 # build launch parameters
@@ -16,4 +16,5 @@ DOCKER_ARGS="run --rm"
 DOCKER_ARGS="$DOCKER_ARGS $LAUNCH_ENVIRONMENT $LAUNCH_VOLUMES $LAUNCH_EXTRA_ARGS $LAUNCH_IMAGE"
 
 echo "Running $LAUNCH_IMAGE: exec docker $DOCKER_ARGS"
+# shellcheck disable=SC2086
 exec docker $DOCKER_ARGS
