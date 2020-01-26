@@ -1,6 +1,7 @@
 # official Docker (CLI) image
 FROM docker:latest
-LABEL maintainer="docker@ix.ai"
+LABEL maintainer="docker@ix.ai"\
+      ai.ix.repository="ix.ai/swarm-launcher"
 
 # launch parameters
 ENV LAUNCH_IMAGE=hello-world \
