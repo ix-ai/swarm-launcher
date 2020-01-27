@@ -5,7 +5,7 @@ set -e
 # does a docker login first
 if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
   echo "Logging in"
-  echo "${LOGIN_PASSWORD}" | docker login -u "${LOGIN_USER}" --password-stdin ${LOGIN_REGISTRY}
+  echo "${LOGIN_PASSWORD}" | docker login -u "${LOGIN_USER}" --password-stdin "${LOGIN_REGISTRY}"
 fi
 
 # pull latest image version
