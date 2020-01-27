@@ -1,4 +1,13 @@
 #!/usr/bin/env sh
+
+set -e
+
+# does a docker login first
+if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
+  echo "Logging in"
+  echo "${LOGIN_PASSWORD}" | docker login -u "${LOGIN_USER}" --password-stdin ${LOGIN_REGISTRY}
+fi
+
 # pull latest image version
 if [ "$LAUNCH_PULL" = true ]; then
     echo "Pulling $LAUNCH_IMAGE: docker pull ${LAUNCH_IMAGE}"
@@ -14,6 +23,6 @@ DOCKER_ARGS="run --rm"
 [ "${LAUNCH_HOST_NETWORK}" = true ] && DOCKER_ARGS="${DOCKER_ARGS} --net host"
 DOCKER_ARGS="${DOCKER_ARGS} ${LAUNCH_ENVIRONMENT} ${LAUNCH_VOLUMES} ${LAUNCH_EXTRA_ARGS} ${LAUNCH_IMAGE}"
 
-echo "Running ${LAUNCH_IMAGE}: exec docker ${DOCKER_ARGS}"
+set -x
 # shellcheck disable=SC2086
 exec docker ${DOCKER_ARGS}
