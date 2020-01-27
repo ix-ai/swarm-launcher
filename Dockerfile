@@ -13,7 +13,10 @@ ENV LAUNCH_IMAGE=hello-world \
     LAUNCH_HOST_NETWORK=false \
     LAUNCH_ENVIRONMENT="" \
     LAUNCH_VOLUMES="" \
-    LAUNCH_EXTRA_ARGS=""
+    LAUNCH_EXTRA_ARGS="" \
+    LOGIN_USER="" \
+    LOGIN_PASSWORD="" \
+    LOGIN_REGISTRY=""
 
 # add entrypoint.sh launcher script
 ADD entrypoint.sh /
