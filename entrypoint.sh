@@ -102,13 +102,17 @@ xEOF
       done
       echo "networks:" >> ${COMPOSE_FILE}
       for NETWORK in ${LAUNCH_NETWORKS}; do
-        echo "  ${NETWORK}:" >> ${COMPOSE_FILE}
-        echo "    driver: bridge" >> ${COMPOSE_FILE}
-        echo "    attachable: false" >> ${COMPOSE_FILE}
+        {
+          echo "  ${NETWORK}:";
+          echo "    driver: bridge";
+          echo "    attachable: false";
+        } >> ${COMPOSE_FILE}
       done
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
-        echo "  ${NETWORK}:" >> ${COMPOSE_FILE}
-        echo "    external: true" >> ${COMPOSE_FILE}
+        {
+          echo "  ${NETWORK}:";
+          echo "    external: true";
+        } >> ${COMPOSE_FILE}
       done
     fi
   fi
