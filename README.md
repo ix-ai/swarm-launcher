@@ -2,6 +2,34 @@
 A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode
 
 ## Usage example
+
+Start GitLab runners in privileged mode for `docker:dind`:
+
+```yml
+version: "3.7"
+
+services:
+  runner-launcher:
+    deploy:
+      mode: global
+      restart_policy:
+        delay: 5s
+    image: ixdotai/swarm-launcher:dev-branch
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:rw'
+    environment:
+      LAUNCH_IMAGE: gitlab/gitlab-runner:alpine
+      LAUNCH_PULL: 'true'
+      LAUNCH_NETWORKS: 'runner-launcher'
+      LAUNCH_PROJECT_NAME: 'ci'
+      LAUNCH_SERVICE_NAME: 'runner'
+      LAUNCH_PRIVILEGED: 'true'
+      LAUNCH_VOLUMES: '/var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw'
+      LAUNCH_PULL: 'true'
+```
+
+Start a tinc (VPN) server:
+
 ```yml
 version: "3.7"
 
