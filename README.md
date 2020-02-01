@@ -1,6 +1,12 @@
 # swarm-launcher
 A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode
 
+## How it works
+
+The image uses `docker-compose` to start a new project (see `LAUNCH_PROJECT_NAME`). You can either use the environment variables to configure the service started inside, or you can supply your own `/docker-compose.yml` file.
+
+Either way, `swarm-launcher` takes care of the setup, tear-down and cleanup of the project.
+
 ## Usage example
 
 Start GitLab runners in privileged mode for `docker:dind`:
@@ -24,7 +30,7 @@ services:
       LAUNCH_PROJECT_NAME: 'ci'
       LAUNCH_SERVICE_NAME: 'runner'
       LAUNCH_PRIVILEGED: 'true'
-      LAUNCH_VOLUMES: '/var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw'
+      LAUNCH_VOLUMES: '/var/run/docker.sock:/var/run/docker.sock:rw /var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw'
       LAUNCH_PULL: 'true'
 ```
 
