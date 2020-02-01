@@ -123,10 +123,10 @@ if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
   echo "Logging in"
   echo "${LOGIN_PASSWORD}" | docker login -u "${LOGIN_USER}" --password-stdin "${LOGIN_REGISTRY}"
 fi
-cat ${COMPOSE_FILE}
+
 # tests the config file
 echo "Testing compose file"
-docker-compose config
+docker-compose config > /dev/null
 
 # pull latest image version
 if [ "${LAUNCH_PULL}" = true ] && [ -n "${LAUNCH_IMAGE}" ] ; then

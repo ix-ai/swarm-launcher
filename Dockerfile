@@ -1,4 +1,4 @@
-# official Docker (CLI) image
+# docker-compose image
 FROM docker/compose:latest
 LABEL maintainer="docker@ix.ai"\
       ai.ix.repository="ix.ai/swarm-launcher"
