@@ -160,41 +160,6 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_LABELS`         | `ai.ix.started-by=ix.ai/swarm-launcher` | NO | Space separated list of Label=Value pairs |
 | `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 
-The `docker-compose.yml` file that gets generated looks like this:
-
-```yml
-version: "3.7"
-
-services:
-  t8rcVy:
-    image: "registry.gitlab.com/ix.ai/tinc:latest"
-    restart: "no"
-    labels:
-      ai.ix.started-by: ix.ai/swarm-launcher
-    privileged: "true"
-    environment:
-      - IP_ADDR=1.2.3.4
-      - ADDRESS=10.20.30.1
-      - NETMASK=255.255.255.0
-      - NETWORK=10.20.30.0/24
-      - RUNMODE=server
-      - VERBOSE=2
-    devices:
-      - /dev/ttyUSB1:/dev/ttyUSB0
-    volumes:
-      - /docker/foo:/docker/bar:ro
-    networks:
-      - vpn
-      - abc
-networks:
-  vpn:
-    driver: bridge
-    attachable: false
-  abc:
-    driver: bridge
-    attachable: false
-```
-
 ## Resources:
 * GitLab: https://gitlab.com/ix.ai/swarm-launcher
 * GitHub: https://github.com/ix-ai/swarm-launcher
