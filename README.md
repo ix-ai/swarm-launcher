@@ -157,6 +157,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_NETWORKS`       | -                          | NO            | Space separated list of project networks to attach to. All networks are created with `attachable: false` |
 | `LAUNCH_EXT_NETWORKS`   | -                          | NO            | Space separated list of external networks to attach to |
 | `LAUNCH_CAP_ADD`        | -                          | NO            | Space separated list of capabilities to add |
+| `LAUNCH_LABELS`         | `ai.ix.started-by=ix.ai/swarm-launcher` | NO | Space separated list of Label=Value pairs |
 | `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 
 The `docker-compose.yml` file that gets generated looks like this:
