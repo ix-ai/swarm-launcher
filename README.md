@@ -7,10 +7,13 @@ The image uses `docker-compose` to start a new project (see `LAUNCH_PROJECT_NAME
 
 Either way, `swarm-launcher` takes care of the setup, tear-down and cleanup of the project.
 
-## Usage example
+## Usage examples
 
-Start GitLab runners in privileged mode for `docker:dind`:
+### GitLab CI Runner with Docker in Docker (`docker:dind`)
 
+**Warning**: This creates one runner on every node you have in your swarm. If you don't want that, remove the line with `mode: global`.
+
+First create the file `stack.yml`:
 ```yml
 version: "3.7"
 
@@ -20,7 +23,7 @@ services:
       mode: global
       restart_policy:
         delay: 5s
-    image: ixdotai/swarm-launcher:dev-branch
+    image: ixdotai/swarm-launcher:latest
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:rw'
     environment:
@@ -34,43 +37,22 @@ services:
       LAUNCH_PULL: 'true'
 ```
 
-Start a tinc (VPN) server:
-
-```yml
-version: "3.7"
-
-services:
-  swarm-launcher:
-    image: ixdotai/swarm-launcher:dev-master
-    environment:
-      LAUNCH_IMAGE: registry.gitlab.com/ix.ai/tinc:dev-master
-      LAUNCH_PROJECT_NAME: "vpn"
-      LAUNCH_SERVICE_NAME: "tinc"
-      LAUNCH_PULL: "true"
-      LAUNCH_PRIVILEGED: "true"
-      LAUNCH_HOST_NETWORK: "true"
-      LAUNCH_ENVIRONMENTS: "IP_ADDR=1.2.3.4 ADDRESS=10.20.30.1 NETMASK=255.255.255.0 NETWORK=10.20.30.0/24 RUNMODE=server VERBOSE=2"
-      LAUNCH_DEVICES: "/dev/ttyUSB0:/dev/ttyUSB0 /dev/ttyUSB1:/dev/ttyUSB1"
-      LAUNCH_VOLUMES: "/var/storage/docker/tinc:/etc/tinc /etc/localtime:/etc/localtime:ro"
-      LOGIN_USER: "gitlab+deploy-token-13"
-      LOGIN_PASSWORD: "bar1u18sJ53,rP1gySg_"
-      LOGIN_REGISTRY: "registry.gitlab.com"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+Then deploy it on your docker swarm:
+```sh
+$ sudo docker stack deploy --compose-file stack.yml --prune --with-registry-auth swarm-launcher
+Creating network swarm-launcher_default
+Creating service swarm-launcher_runner-launcher
 ```
 
-or just give it a spin manually
-
+After a minute or two, you will see everything running:
 ```sh
-docker run --rm \
-           -e LAUNCH_IMAGE=registry.gitlab.com/ix.ai/tinc:dev-master \
-           -e LAUNCH_PULL="true" \
-           -e LAUNCH_PRIVILEGED="true" \
-           -e LAUNCH_HOST_NETWORK="true" \
-           -e LAUNCH_ENVIRONMENTS="IP_ADDR=1.2.3.4 ADDRESS=10.20.30.1 NETMASK=255.255.255.0 NETWORK=10.20.30.0/24 RUNMODE=server VERBOSE=2" \
-           -e LAUNCH_VOLUMES="/etc/localtime:/etc/localtime:ro" \
-           -v /var/run/docker.sock:/var/run/docker.sock \
-           ixdotai/swarm-launcher:dev-master
+$ docker service ls -f name=swarm-launcher
+ID                  NAME                             MODE                REPLICAS            IMAGE                               PORTS
+ol6evlgsonht        swarm-launcher_runner-launcher   global              1/1                 ixdotai/swarm-launcher:latest
+$ docker ps -f name=runner
+CONTAINER ID        IMAGE                               COMMAND                  CREATED             STATUS              PORTS               NAMES
+492092860a19        gitlab/gitlab-runner:alpine         "/usr/bin/dumb-init …"   2 minutes ago       Up 2 minutes                            ci_runner_1
+b1d01c7eed90        ixdotai/swarm-launcher:dev-branch   "/bin/sh -c /entrypo…"   2 minutes ago       Up 2 minutes                            swarm-launcher_runner-launcher.x4aejcpuklo5bih3qmrcnxb6n.q7iajdrf2rrqibzhwvgikel80
 ```
 
 ## Environment variables
@@ -108,7 +90,7 @@ version: "3.7"
 
 services:
   t8rcVy:
-    image: "registry.gitlab.com/ix.ai/tinc:dev-master"
+    image: "registry.gitlab.com/ix.ai/tinc:latest"
     restart: "no"
     labels:
       ai.ix.started-by: ix.ai/swarm-launcher
