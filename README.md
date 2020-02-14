@@ -34,7 +34,6 @@ services:
       LAUNCH_SERVICE_NAME: 'runner'
       LAUNCH_PRIVILEGED: 'true'
       LAUNCH_VOLUMES: '/var/run/docker.sock:/var/run/docker.sock:rw /var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw'
-      LAUNCH_PULL: 'true'
 ```
 
 Then deploy it on your docker swarm:
@@ -53,6 +52,82 @@ $ docker ps -f name=runner
 CONTAINER ID        IMAGE                               COMMAND                  CREATED             STATUS              PORTS               NAMES
 492092860a19        gitlab/gitlab-runner:alpine         "/usr/bin/dumb-init …"   2 minutes ago       Up 2 minutes                            ci_runner_1
 b1d01c7eed90        ixdotai/swarm-launcher:dev-branch   "/bin/sh -c /entrypo…"   2 minutes ago       Up 2 minutes                            swarm-launcher_runner-launcher.x4aejcpuklo5bih3qmrcnxb6n.q7iajdrf2rrqibzhwvgikel80
+```
+
+Since **swarm-launcher** generates a `docker-compose.yml` file, this is how the file looks like (after applying `docker-compose config`):
+
+```yml
+networks:
+  runner-launcher:
+    attachable: false
+    driver: bridge
+services:
+  runner:
+    image: gitlab/gitlab-runner:alpine
+    labels:
+      ai.ix.started-by: ix.ai/swarm-launcher
+    networks:
+      runner-launcher: null
+    privileged: true
+    restart: "no"
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock:rw
+    - /var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw
+version: '3.7'
+```
+
+### OpenVPN Access Server
+
+The stack.yml file:
+```yml
+version: "3.7"
+
+services:
+  runner-launcher:
+    image: ixdotai/swarm-launcher:latest
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock:rw'
+    environment:
+      LAUNCH_IMAGE: linuxserver/openvpn-as:latest
+      LAUNCH_PULL: 'true'
+      LAUNCH_NETWORKS: 'openvpn-as'
+      LAUNCH_ENVIRONMENTS: 'PUID=1000 PGID=1000 TZ=Europe/Berlin'
+      LAUNCH_PORTS: '943:943 9443:9443 1194:1194/udp'
+      LAUNCH_VOLUMES: '/var/storage/docker/openvpn-as:/config:rw'
+      LAUNCH_CAP_ADD: 'NET_ADMIN'
+```
+
+This is how the generated `docker-compose.yml` file looks like (you'll notice the random service name, since we didn't set `LAUNCH_SERVICE_NAME`):
+```yml
+networks:
+  openvpn-as:
+    attachable: false
+    driver: bridge
+services:
+  YVyaqr:
+    cap_add:
+    - NET_ADMIN
+    environment:
+      PGID: '1000'
+      PUID: '1000'
+      TZ: Europe/Berlin
+    image: linuxserver/openvpn-as:latest
+    labels:
+      ai.ix.started-by: ix.ai/swarm-launcher
+    networks:
+      openvpn-as: null
+    ports:
+    - published: 943
+      target: 943
+    - published: 9443
+      target: 9443
+    - protocol: udp
+      published: 1194
+      target: 1194
+    restart: "no"
+    volumes:
+    - /var/storage/docker/openvpn-as:/config:rw
+version: '3.7'
 ```
 
 ## Environment variables
@@ -81,6 +156,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_PORTS`          | -                          | NO            | Space separated list of PortOnHost:PortInContainer |
 | `LAUNCH_NETWORKS`       | -                          | NO            | Space separated list of project networks to attach to. All networks are created with `attachable: false` |
 | `LAUNCH_EXT_NETWORKS`   | -                          | NO            | Space separated list of external networks to attach to |
+| `LAUNCH_CAP_ADD`        | -                          | NO            | Space separated list of capabilities to add |
 | `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 
 The `docker-compose.yml` file that gets generated looks like this:

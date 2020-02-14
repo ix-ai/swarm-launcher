@@ -82,6 +82,14 @@ xEOF
     done
   fi
 
+  # Add capabilities
+  if [ -n "${LAUNCH_CAP_ADD}" ]; then
+    echo "    cap_add:" >> ${COMPOSE_FILE}
+    for CAP in ${LAUNCH_CAP_ADD}; do
+      echo "      - ${CAP}" >> ${COMPOSE_FILE}
+    done
+  fi
+
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then
     echo "    network_mode: host" >> ${COMPOSE_FILE}
@@ -126,7 +134,7 @@ fi
 
 # tests the config file
 echo "Testing compose file"
-docker-compose config > /dev/null
+docker-compose config
 
 # pull latest image version
 if [ "${LAUNCH_PULL}" = true ] && [ -n "${LAUNCH_IMAGE}" ] ; then
