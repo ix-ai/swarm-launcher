@@ -98,6 +98,14 @@ xEOF
     done
   fi
 
+  # Drop capabilities
+  if [ -n "${LAUNCH_CAP_DROP}" ]; then
+    echo "    cap_drop:" >> ${COMPOSE_FILE}
+    for CAP in ${LAUNCH_CAP_DOP}; do
+      echo "      - ${CAP}" >> ${COMPOSE_FILE}
+    done
+  fi
+
   # sysctls
   if [ -n "${LAUNCH_SYSCTLS}" ]; then
     echo "    sysctls:" >> ${COMPOSE_FILE}
