@@ -65,6 +65,11 @@ xEOF
   if [ "${LAUNCH_PRIVILEGED}" = true ]; then
     echo "    privileged: \"true\"" >> ${COMPOSE_FILE}
   fi
+  
+  # specify an optional parent cgroup for the container
+  if [ "${LAUNCH_CGROUP_PARENT}" = true ]; then
+    echo "    cgroup_parent: ${LAUNCH_CGROUP_PARENT}" >> ${COMPOSE_FILE}
+  fi
 
   # the environment variables
   if [ -n "${LAUNCH_ENVIRONMENTS}" ]; then
