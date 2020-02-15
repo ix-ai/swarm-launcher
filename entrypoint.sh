@@ -98,6 +98,14 @@ xEOF
     done
   fi
 
+  # sysctls
+  if [ -n "${LAUNCH_SYSCTLS}" ]; then
+    echo "    sysctls:" >> ${COMPOSE_FILE}
+    for SYSCTL in ${LAUNCH_SYSCTLS}; do
+      echo "      - ${SYSCTL}" >> ${COMPOSE_FILE}
+    done
+  fi
+
   # Override the command
   if [ -n "${LAUNCH_COMMAND}" ]; then
     echo "    command: \"${LAUNCH_COMMAND}\"" >> ${COMPOSE_FILE}

@@ -160,6 +160,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_LABELS`         | `ai.ix.started-by=ix.ai/swarm-launcher` | NO | Space separated list of Label=Value pairs |
 | `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 | `LAUNCH_COMMAND`        | -                          | NO            | A string that overrides the default command |
+| `LAUNCH_SYSCTLS`        | -                          | NO            | Space separated list of sysctl=value |
 
 ## Resources:
 * GitLab: https://gitlab.com/ix.ai/swarm-launcher
