@@ -98,6 +98,11 @@ xEOF
     done
   fi
 
+  # Override the command
+  if [ -n "${LAUNCH_COMMAND}" ]; then
+    echo "    command: \"${LAUNCH_COMMAND}\"" >> ${COMPOSE_FILE}
+  fi
+
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then
     echo "    network_mode: host" >> ${COMPOSE_FILE}
