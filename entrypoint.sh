@@ -65,6 +65,11 @@ xEOF
   if [ "${LAUNCH_PRIVILEGED}" = true ]; then
     echo "    privileged: \"true\"" >> ${COMPOSE_FILE}
   fi
+  
+  # specify an optional parent cgroup for the container
+  if [ "${LAUNCH_CGROUP_PARENT}" = true ]; then
+    echo "    cgroup_parent: ${LAUNCH_CGROUP_PARENT}" >> ${COMPOSE_FILE}
+  fi
 
   # the environment variables
   if [ -n "${LAUNCH_ENVIRONMENTS}" ]; then
@@ -94,6 +99,14 @@ xEOF
   if [ -n "${LAUNCH_CAP_ADD}" ]; then
     echo "    cap_add:" >> ${COMPOSE_FILE}
     for CAP in ${LAUNCH_CAP_ADD}; do
+      echo "      - ${CAP}" >> ${COMPOSE_FILE}
+    done
+  fi
+
+  # Drop capabilities
+  if [ -n "${LAUNCH_CAP_DROP}" ]; then
+    echo "    cap_drop:" >> ${COMPOSE_FILE}
+    for CAP in ${LAUNCH_CAP_DOP}; do
       echo "      - ${CAP}" >> ${COMPOSE_FILE}
     done
   fi
