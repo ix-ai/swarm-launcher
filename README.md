@@ -123,7 +123,7 @@ This is how the generated `docker-compose.yml` file looks like (you'll notice th
 ```yml
 networks:
   openvpn-as:
-    attachable: false
+    attachable: true
     driver: bridge
 services:
   YVyaqr:
@@ -174,9 +174,9 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_ENVIRONMENTS`   | -                          | NO            | Space separated list of Key=Value pairs |
 | `LAUNCH_DEVICES`        | -                          | NO            | Space separated list of DeviceOnHost:DeviceInContainer |
 | `LAUNCH_VOLUMES`        | -                          | NO            | Space separated list of File/FolderOnHost:File/FolderInContainer |
-| `LAUNCH_HOST_NETWORK`   | `false`                    | NO            | Set this to `true` to start the container on the host network. This option is not compatible with `LAUNCH_PORTS` and `LAUNCH_NETWORKS` |
+| `LAUNCH_HOST_NETWORK`   | `false`                    | NO            | Set this to `true` to start the container on the host network. This option is not compatible with `LAUNCH_PORTS`, `LAUNCH_NETWORKS` and `LAUNCH_EXT_NETWORKS` |
 | `LAUNCH_PORTS`          | -                          | NO            | Space separated list of PortOnHost:PortInContainer |
-| `LAUNCH_NETWORKS`       | -                          | NO            | Space separated list of project networks to attach to. All networks are created with `attachable: false` |
+| `LAUNCH_NETWORKS`       | -                          | NO            | Space separated list of project networks to create. All networks are created with `attachable: true` |
 | `LAUNCH_EXT_NETWORKS`   | -                          | NO            | Space separated list of external networks to attach to |
 | `LAUNCH_CAP_ADD`        | -                          | NO            | Space separated list of capabilities to add |
 | `LAUNCH_CAP_DROP`       | -                          | NO            | Space separated list of capabilities to drop |
