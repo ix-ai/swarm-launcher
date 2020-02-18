@@ -14,20 +14,33 @@ _cleanup(){
 
 _startup_check(){
   _echo "Doing startup check"
-
-  # Check if the networks are attachable
-  if [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
-    for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
-      ATTACHABLE=$(docker network inspect ${NETWORK}|jq -r ".[].Attachable")
-      if [ -z "${ATTACHABLE}" ]; then
-        _echo "ERROR! Network ${NETWORK} does not exist. Exiting."
-        NEED_EXIT=true
-      fi
-      if [ "${ATTACHABLE}" == 'false' ]; then
-        _echo "ERROR! Network '${NETWORK}' is not attachable. Exiting."
-        NEED_EXIT=true
-      fi
-    done
+  
+  # Check that no conflicting options are passed and display warning
+  if [ "${LAUNCH_HOST_NETWORK}" == true ]; then
+    if [ -n "${LAUNCH_PORTS}" ]; then
+      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_PORTS"
+    fi
+    if [ -n "${LAUNCH_NETWORKS}" ]; then
+      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_NETWORKS"
+    fi
+    if [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
+      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_EXT_NETWORKS"
+    fi
+  else
+    # Check if the networks are attachable
+    if [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
+      for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
+        ATTACHABLE=$(docker network inspect ${NETWORK}|jq -r ".[].Attachable")
+        if [ -z "${ATTACHABLE}" ]; then
+          _echo "ERROR! Network ${NETWORK} does not exist. Exiting."
+          NEED_EXIT=true
+        fi
+        if [ "${ATTACHABLE}" == 'false' ]; then
+          _echo "ERROR! Network '${NETWORK}' is not attachable. Exiting."
+          NEED_EXIT=true
+        fi
+      done
+    fi
   fi
 
   # Check if there's a need to exit now
