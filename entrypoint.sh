@@ -114,6 +114,7 @@ services:
     image: "${LAUNCH_IMAGE}"
     restart: "no"
     labels:
+      - "ai.ix.started-by=ix.ai/swarm-launcher"
 xEOF
 
   # additional labels for the container
@@ -121,8 +122,6 @@ xEOF
     for LABEL in ${LAUNCH_LABELS}; do
       echo "      - \"${LABEL}\"" >> ${COMPOSE_FILE}
     done
-  else
-    echo "    - \"ai.ix.started-by=ix.ai/swarm-launcher\"" >> ${COMPOSE_FILE}
   fi
 
   # name the container
