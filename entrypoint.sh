@@ -3,20 +3,48 @@
 set -e
 
 _term() {
-  echo "Caught SIGTERM signal!"
+  _echo "Caught SIGTERM signal!"
   _cleanup
 }
 
 _cleanup(){
-  echo "Cleaning up"
+  _echo "Cleaning up"
   docker-compose --project-name "${LAUNCH_PROJECT_NAME}" down --remove-orphans
+}
+
+_startup_check(){
+  _echo "Doing startup check"
+
+  # Check if the networks are attachable
+  if [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
+    for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
+      ATTACHABLE=$(docker network inspect ${NETWORK}|jq -r ".[].Attachable")
+      if [ -z "${ATTACHABLE}" ]; then
+        _echo "ERROR! Network ${NETWORK} does not exist. Exiting."
+        NEED_EXIT=true
+      fi
+      if [ "${ATTACHABLE}" == 'false' ]; then
+        _echo "ERROR! Network '${NETWORK}' is not attachable. Exiting."
+        NEED_EXIT=true
+      fi
+    done
+  fi
+
+  # Check if there's a need to exit now
+  if [ "${NEED_EXIT}" == true ]; then
+    exit 1
+  fi
+}
+
+_echo(){
+  echo "swarm-launcher: $*"
 }
 
 COMPOSE_FILE="/docker-compose.yml"
 
 CREATE_COMPOSE_FILE=true
 if [ -f ${COMPOSE_FILE} ]; then
-  echo "Detected mounted docker-compose.yml file"
+  _echo "Detected mounted docker-compose.yml file"
 
   LAUNCH_VARIABLES=(
     'LAUNCH_IMAGE'
@@ -41,7 +69,7 @@ if [ -f ${COMPOSE_FILE} ]; then
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
-      echo "WARNING: ${LAUNCH_VARIABLE} is set, but a docker-compose.yml file has been provided. ${LAUNCH_VARIABLE} will be ignored!"
+      _echo "WARNING: ${LAUNCH_VARIABLE} is set, but a docker-compose.yml file has been provided. ${LAUNCH_VARIABLE} will be ignored!"
     fi
   done
   CREATE_COMPOSE_FILE=false
@@ -49,9 +77,10 @@ fi
 
 # creates a docker-compose.yml file
 if [ "${CREATE_COMPOSE_FILE}" == "true" ]; then
+  _startup_check
   # exits if there's no LAUNCH_IMAGE set
   if [ -z "${LAUNCH_IMAGE}" ]; then
-    echo "LAUNCH_IMAGE is not set! Exiting!"
+    _echo "LAUNCH_IMAGE is not set! Exiting!"
     exit 1
   fi
 
@@ -189,17 +218,17 @@ fi
 
 # does a docker login
 if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
-  echo "Logging in"
+  _echo "Logging in"
   echo "${LOGIN_PASSWORD}" | docker login -u "${LOGIN_USER}" --password-stdin "${LOGIN_REGISTRY}"
 fi
 
 # tests the config file
-echo "Testing compose file"
+_echo "Testing compose file"
 docker-compose config
 
 # pull latest image version
 if [ "${LAUNCH_PULL}" = true ] && [ -n "${LAUNCH_IMAGE}" ] ; then
-    echo "Pulling ${LAUNCH_IMAGE}"
+    _echo "Pulling ${LAUNCH_IMAGE}"
     docker pull "${LAUNCH_IMAGE}"
 fi
 
