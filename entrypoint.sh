@@ -30,7 +30,7 @@ _startup_check(){
     # Check if the networks are attachable
     if [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
-        ATTACHABLE=$(docker network inspect ${NETWORK}|jq -r ".[].Attachable")
+        ATTACHABLE=$(docker network inspect "${NETWORK}"|jq -r ".[].Attachable")
         if [ -z "${ATTACHABLE}" ]; then
           _echo "ERROR! Network ${NETWORK} does not exist. Exiting."
           NEED_EXIT=true
