@@ -147,7 +147,7 @@ xEOF
         {
           echo "  ${NETWORK}:";
           echo "    driver: bridge";
-          echo "    attachable: false";
+          echo "    attachable: true";
         } >> ${COMPOSE_FILE}
       done
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
