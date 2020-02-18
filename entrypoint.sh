@@ -16,7 +16,34 @@ COMPOSE_FILE="/docker-compose.yml"
 
 CREATE_COMPOSE_FILE=true
 if [ -f ${COMPOSE_FILE} ]; then
-  echo "Detected mounted docker-compose.yml file. Starting directly."
+  echo "Detected mounted docker-compose.yml file"
+
+  LAUNCH_VARIABLES=(
+    'LAUNCH_IMAGE'
+    'LAUNCH_PROJECT_NAME'
+    'LAUNCH_SERVICE_NAME'
+    'LAUNCH_CONTAINER_NAME'
+    'LAUNCH_PRIVILEGED'
+    'LAUNCH_ENVIRONMENTS'
+    'LAUNCH_DEVICES'
+    'LAUNCH_VOLUMES'
+    'LAUNCH_HOST_NETWORK'
+    'LAUNCH_PORTS'
+    'LAUNCH_NETWORKS'
+    'LAUNCH_EXT_NETWORKS'
+    'LAUNCH_CAP_ADD'
+    'LAUNCH_CAP_DROP'
+    'LAUNCH_LABELS'
+    'LAUNCH_PULL'
+    'LAUNCH_SYSCTLS'
+    'LAUNCH_COMMAND'
+    'LAUNCH_CGROUP_PARENT'
+  )
+  for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
+    if [ -n "${!LAUNCH_VARIABLE}" ]; then
+      echo "WARNING: ${LAUNCH_VARIABLE} is set, but a docker-compose.yml file has been provided. ${LAUNCH_VARIABLE} will be ignored!"
+    fi
+  done
   CREATE_COMPOSE_FILE=false
 fi
 
