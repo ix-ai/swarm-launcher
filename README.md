@@ -186,7 +186,10 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_COMMAND`        | -                          | NO            | A string that overrides the default command |
 | `LAUNCH_CGROUP_PARENT`  | -                          | NO            | A string that specify the parent cgroup for the container |
 
+**Note**: Make sure you check out the documentation in the [Wiki](https://github.com/ix-ai/swarm-launcher/wiki).
+
 ## Resources:
+* Wiki: https://github.com/ix-ai/swarm-launcher/wiki
 * GitLab: https://gitlab.com/ix.ai/swarm-launcher
 * GitHub: https://github.com/ix-ai/swarm-launcher
 * Docker Hub: https://hub.docker.com/r/ixdotai/swarm-launcher
