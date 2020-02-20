@@ -1,4 +1,6 @@
 # swarm-launcher
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fix-ai%2Fswarm-launcher.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fix-ai%2Fswarm-launcher?ref=badge_shield)
+
 A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode
 
 ## How it works
@@ -196,3 +198,7 @@ The following environment variables are important if you don't supply a `/docker
 
 ## Credits
 This Docker image is inspired by the post by [@akomelj](https://github.com/akomelj) in [moby/moby#25885](https://github.com/moby/moby/issues/25885#issuecomment-573449645)
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fix-ai%2Fswarm-launcher.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fix-ai%2Fswarm-launcher?ref=badge_large)
