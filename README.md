@@ -1,4 +1,12 @@
 # swarm-launcher
+
+[![Pipeline Status](https://gitlab.com/ix.ai/swarm-launcher/badges/master/pipeline.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
+[![Docker Stars](https://img.shields.io/docker/stars/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
+[![Image Layers](https://images.microbadger.com/badges/image/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
+[![Latest Version](https://images.microbadger.com/badges/version/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
+[![Gitlab Project](https://img.shields.io/badge/GitLab-Project-554488.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
+
 A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode
 
 ## How it works
@@ -7,150 +15,9 @@ The image uses `docker-compose` to start a new project (see `LAUNCH_PROJECT_NAME
 
 Either way, `swarm-launcher` takes care of the setup, tear-down and cleanup of the project.
 
-## Usage examples
+## Docs and Usage examples
 
-### GitLab CI Runner with Docker in Docker (`docker:dind`) and healthcheck
-
-**Warning**: This creates one runner on every node you have in your swarm. If you don't want that, remove the line with `mode: global`.
-
-First create the file `stack.yml`:
-```yml
-version: "3.7"
-
-services:
-  runner-launcher:
-    deploy:
-      mode: global
-      restart_policy:
-        delay: 5s
-      labels:
-        ai.ix.auto-update: 'true'
-    image: ixdotai/swarm-launcher:latest
-    networks:
-      - runners
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:rw'
-    environment:
-      LAUNCH_IMAGE: gitlab/gitlab-runner:alpine
-      LAUNCH_PULL: 'true'
-      LAUNCH_EXT_NETWORKS: 'runners_runners'
-      LAUNCH_PROJECT_NAME: 'ci'
-      LAUNCH_SERVICE_NAME: 'runner'
-      LAUNCH_CONTAINER_NAME: 'gitlab-ci-runner'
-      LAUNCH_PRIVILEGED: 'true'
-      LAUNCH_VOLUMES: '/var/run/docker.sock:/var/run/docker.sock:rw /var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw'
-      LAUNCH_PULL: 'true'
-      LAUNCH_LABELS: 'ai.ix.auto-update=true'
-      LAUNCH_COMMAND: 'run --listen-address=:9252 --user=gitlab-runner --working-directory=/home/gitlab-runner'
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://gitlab-ci-runner:9252/metrics"]
-      timeout: 5s
-      retries: 15
-      start_period: 30s
-networks:
-  runners:
-    driver: overlay
-    driver_opts:
-      encrypted: 'true'
-    attachable: true
-
-```
-
-Then deploy it on your docker swarm:
-```sh
-$ sudo docker stack deploy --compose-file stack.yml --prune --with-registry-auth runners
-Creating network runners_runners
-Creating service runners_runner-launcher
-```
-
-After a minute or two, you will see everything running:
-```sh
-$ sudo docker service ls -f name=runner
-ID                  NAME                      MODE                REPLICAS            IMAGE                               PORTS
-vxgmp8v25kkk        runners_runner-launcher   global              3/3                 ixdotai/swarm-launcher:latest
-$ sudo docker ps -f name=runner
-CONTAINER ID        IMAGE                               COMMAND                  CREATED              STATUS                        PORTS               NAMES
-371f43b30bd3        gitlab/gitlab-runner:alpine         "/usr/bin/dumb-init …"   About a minute ago   Up About a minute                                 gitlab-ci-runner
-15be5268f736        ixdotai/swarm-launcher:latest       "/bin/sh -c /entrypo…"   About a minute ago   Up About a minute (healthy)                       runners_runner-launcher.wgay0ielark3a2wgnthkvy7fc.swq8jqxmonm4ay5gxjb62a2n0
-```
-
-Since **swarm-launcher** generates a `docker-compose.yml` file, this is how the file looks like (after applying `docker-compose config`):
-
-```yml
-networks:
-  runners_runners:
-    external: true
-    name: runners_runners
-services:
-  runner:
-    command: run --listen-address=:9252 --user=gitlab-runner --working-directory=/home/gitlab-runner
-    container_name: gitlab-ci-runner
-    image: gitlab/gitlab-runner:alpine
-    labels:
-      ai.ix.auto-update: "true"
-    networks:
-      runners_runners: null
-    privileged: true
-    restart: "no"
-    volumes:
-    - /var/run/docker.sock:/var/run/docker.sock:rw
-    - /var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw
-version: '3.7'
-```
-
-### OpenVPN Access Server
-
-The stack.yml file:
-```yml
-version: "3.7"
-
-services:
-  runner-launcher:
-    image: ixdotai/swarm-launcher:latest
-    volumes:
-      - '/var/run/docker.sock:/var/run/docker.sock:rw'
-    environment:
-      LAUNCH_IMAGE: linuxserver/openvpn-as:latest
-      LAUNCH_PULL: 'true'
-      LAUNCH_NETWORKS: 'openvpn-as'
-      LAUNCH_ENVIRONMENTS: 'PUID=1000 PGID=1000 TZ=Europe/Berlin'
-      LAUNCH_PORTS: '943:943 9443:9443 1194:1194/udp'
-      LAUNCH_VOLUMES: '/var/storage/docker/openvpn-as:/config:rw'
-      LAUNCH_CAP_ADD: 'NET_ADMIN'
-```
-
-This is how the generated `docker-compose.yml` file looks like (you'll notice the random service name, since we didn't set `LAUNCH_SERVICE_NAME`):
-```yml
-networks:
-  openvpn-as:
-    attachable: true
-    driver: bridge
-services:
-  YVyaqr:
-    cap_add:
-    - NET_ADMIN
-    environment:
-      PGID: '1000'
-      PUID: '1000'
-      TZ: Europe/Berlin
-    image: linuxserver/openvpn-as:latest
-    labels:
-      ai.ix.started-by: ix.ai/swarm-launcher
-    networks:
-      openvpn-as: null
-    ports:
-    - published: 943
-      target: 943
-    - published: 9443
-      target: 9443
-    - protocol: udp
-      published: 1194
-      target: 1194
-    restart: "no"
-    volumes:
-    - /var/storage/docker/openvpn-as:/config:rw
-version: '3.7'
-```
+See [Docs](docs/) and [Usage Examples](docs/usage_examples)
 
 ## Environment variables
 
@@ -186,10 +53,9 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_COMMAND`        | -                          | NO            | A string that overrides the default command |
 | `LAUNCH_CGROUP_PARENT`  | -                          | NO            | A string that specify the parent cgroup for the container |
 
-**Note**: Make sure you check out the documentation in the [Wiki](https://github.com/ix-ai/swarm-launcher/wiki).
+**Note**: Make sure you check out the [documentation](docs/).
 
 ## Resources:
-* Wiki: https://github.com/ix-ai/swarm-launcher/wiki
 * GitLab: https://gitlab.com/ix.ai/swarm-launcher
 * GitHub: https://github.com/ix-ai/swarm-launcher
 * Docker Hub: https://hub.docker.com/r/ixdotai/swarm-launcher
