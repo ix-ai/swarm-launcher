@@ -79,6 +79,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_SYSCTLS'
     'LAUNCH_COMMAND'
     'LAUNCH_CGROUP_PARENT'
+    'LAUNCH_STOP_GRACE_PERIOD'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -225,6 +226,11 @@ xEOF
         } >> ${COMPOSE_FILE}
       done
     fi
+  fi
+
+  # stop grace period
+  if [ -n "${LAUNCH_STOP_GRACE_PERIOD}" ]; then
+    echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> ${COMPOSE_FILE}
   fi
 fi
 
