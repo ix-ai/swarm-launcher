@@ -192,6 +192,11 @@ xEOF
   if [ -n "${LAUNCH_COMMAND}" ]; then
     echo "    command: \"${LAUNCH_COMMAND}\"" >> ${COMPOSE_FILE}
   fi
+  
+  # stop grace period
+  if [ -n "${LAUNCH_STOP_GRACE_PERIOD}" ]; then
+    echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> ${COMPOSE_FILE}
+  fi
 
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then
@@ -226,11 +231,6 @@ xEOF
         } >> ${COMPOSE_FILE}
       done
     fi
-  fi
-
-  # stop grace period
-  if [ -n "${LAUNCH_STOP_GRACE_PERIOD}" ]; then
-    echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> ${COMPOSE_FILE}
   fi
 fi
 
