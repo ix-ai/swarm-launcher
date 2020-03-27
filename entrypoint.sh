@@ -79,6 +79,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_SYSCTLS'
     'LAUNCH_COMMAND'
     'LAUNCH_CGROUP_PARENT'
+    'LAUNCH_STOP_GRACE_PERIOD'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -190,6 +191,11 @@ xEOF
   # Override the command
   if [ -n "${LAUNCH_COMMAND}" ]; then
     echo "    command: \"${LAUNCH_COMMAND}\"" >> ${COMPOSE_FILE}
+  fi
+  
+  # stop grace period
+  if [ -n "${LAUNCH_STOP_GRACE_PERIOD}" ]; then
+    echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> ${COMPOSE_FILE}
   fi
 
   # run on the host network - it's incompatible with ports or with named networks

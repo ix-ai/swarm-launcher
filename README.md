@@ -52,6 +52,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_SYSCTLS`        | -                          | NO            | Space separated list of sysctl=value |
 | `LAUNCH_COMMAND`        | -                          | NO            | A string that overrides the default command |
 | `LAUNCH_CGROUP_PARENT`  | -                          | NO            | A string that specify the parent cgroup for the container |
+| `LAUNCH_STOP_GRACE_PERIOD` | `10s` (by docker)       | NO            | Allows to override the default [stop_grace_period](https://docs.docker.com/compose/compose-file/#stop_grace_period). **Note**: It makes sense to also add a slightly higher `stop_grace_period` to the `swarm-launcher` stack as well! |
 
 **Note**: Make sure you check out the [documentation](docs/).
 
