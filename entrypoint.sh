@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-
 _term() {
   _echo "Caught SIGTERM signal!"
   _cleanup
@@ -143,8 +142,9 @@ xEOF
   # the environment variables
   if [ -n "${LAUNCH_ENVIRONMENTS}" ]; then
     echo "    environment:" >> ${COMPOSE_FILE}
-    for ENVIRONMENT in ${LAUNCH_ENVIRONMENTS}; do
-      echo "      - ${ENVIRONMENT}" >> ${COMPOSE_FILE}
+    read -ra ARR <<<"${LAUNCH_ENVIRONMENTS}"
+    for ENVIRONMENT in "${ARR[@]}"; do
+      echo "      - ${ENVIRONMENT/@_@/' '}" >> ${COMPOSE_FILE}
     done
   fi
 
