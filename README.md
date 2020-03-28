@@ -38,7 +38,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_SERVICE_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the service |
 | `LAUNCH_CONTAINER_NAME` | random (by docker)         | NO            | If you want to use a specific name for the container (similar to the task name) |
 | `LAUNCH_PRIVILEGED`     | `false`                    | NO            | Set this to `true` if you want to start a privileged container |
-| `LAUNCH_ENVIRONMENTS`   | -                          | NO            | Space separated list of Key=Value pairs |
+| `LAUNCH_ENVIRONMENTS`   | -                          | NO            | Space separated list of Key=Value pairs. **Note**: `@_@` gets replaced with a single whitespace, so you can expose environment values containing spaces. |
 | `LAUNCH_DEVICES`        | -                          | NO            | Space separated list of DeviceOnHost:DeviceInContainer |
 | `LAUNCH_VOLUMES`        | -                          | NO            | Space separated list of File/FolderOnHost:File/FolderInContainer |
 | `LAUNCH_HOST_NETWORK`   | `false`                    | NO            | Set this to `true` to start the container on the host network. This option is not compatible with `LAUNCH_PORTS`, `LAUNCH_NETWORKS` and `LAUNCH_EXT_NETWORKS` |
