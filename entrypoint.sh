@@ -144,7 +144,7 @@ xEOF
     echo "    environment:" >> ${COMPOSE_FILE}
     read -ra ARR <<<"${LAUNCH_ENVIRONMENTS}"
     for ENVIRONMENT in "${ARR[@]}"; do
-      echo "      - ${ENVIRONMENT/@_@/' '}" >> ${COMPOSE_FILE}
+      echo "      - ${ENVIRONMENT//@_@/' '}" >> ${COMPOSE_FILE}
     done
   fi
 
