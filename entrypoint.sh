@@ -250,7 +250,10 @@ if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
 fi
 
 # tests the config file
-_echo "Testing compose file"
+_echo "Testing compose file:"
+echo "-----------------------------------"
+cat ${COMPOSE_FILE}
+echo "-----------------------------------"
 docker-compose config
 
 # pull latest image version

@@ -19,6 +19,12 @@ Either way, `swarm-launcher` takes care of the setup, tear-down and cleanup of t
 
 See [Docs](docs/) and [Usage Examples](docs/usage_examples)
 
+## Building the image
+
+```
+docker build -t swarm-launcher .
+```
+
 ## Environment variables
 
 The following environment variables are important, if you plan on using a private repository:
