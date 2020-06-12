@@ -73,6 +73,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_EXT_NETWORKS'
     'LAUNCH_CAP_ADD'
     'LAUNCH_CAP_DROP'
+    'LAUNCH_SECURITY_OPT'
     'LAUNCH_LABELS'
     'LAUNCH_PULL'
     'LAUNCH_SYSCTLS'
@@ -177,6 +178,14 @@ xEOF
     echo "    cap_drop:" >> ${COMPOSE_FILE}
     for CAP in ${LAUNCH_CAP_DOP}; do
       echo "      - ${CAP}" >> ${COMPOSE_FILE}
+    done
+  fi
+
+  # Security opt
+  if [ -n "${LAUNCH_SECURITY_OPT}" ]; then
+    echo "    security_opt:" >> ${COMPOSE_FILE}
+    for SECURITY_OPT in ${LAUNCH_SECURITY_OPT}; do
+      echo "      - ${SECURITY_OPT}" >> ${COMPOSE_FILE}
     done
   fi
 
