@@ -251,9 +251,9 @@ fi
 
 # tests the config file
 _echo "Testing compose file:"
-echo "-----------------------------------"
+_echo "-----------------------------------"
 cat ${COMPOSE_FILE}
-echo "-----------------------------------"
+_echo "-----------------------------------"
 docker-compose config
 
 # pull latest image version
