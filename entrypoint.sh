@@ -73,6 +73,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_EXT_NETWORKS'
     'LAUNCH_CAP_ADD'
     'LAUNCH_CAP_DROP'
+    'LAUNCH_SECURITY_OPT'
     'LAUNCH_LABELS'
     'LAUNCH_PULL'
     'LAUNCH_SYSCTLS'
@@ -180,6 +181,14 @@ xEOF
     done
   fi
 
+  # Security opt
+  if [ -n "${LAUNCH_SECURITY_OPT}" ]; then
+    echo "    security_opt:" >> ${COMPOSE_FILE}
+    for SECURITY_OPT in ${LAUNCH_SECURITY_OPT}; do
+      echo "      - ${SECURITY_OPT}" >> ${COMPOSE_FILE}
+    done
+  fi
+
   # sysctls
   if [ -n "${LAUNCH_SYSCTLS}" ]; then
     echo "    sysctls:" >> ${COMPOSE_FILE}
@@ -241,7 +250,10 @@ if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
 fi
 
 # tests the config file
-_echo "Testing compose file"
+_echo "Testing compose file:"
+_echo "-----------------------------------"
+cat ${COMPOSE_FILE}
+_echo "-----------------------------------"
 docker-compose config
 
 # pull latest image version
