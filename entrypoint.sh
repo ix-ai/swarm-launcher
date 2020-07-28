@@ -244,7 +244,10 @@ xEOF
 fi
 
 # does a docker login
-if [ -n "${LOGIN_USER}" ] && [ -n "${LOGIN_PASSWORD}" ]; then
+if [[ -n "${LOGIN_USER}" && ( -f "${LOGIN_PASSWORD_FILE}" || -n "${LOGIN_PASSWORD}" ) ]]; then
+  if [ -f "${LOGIN_PASSWORD_FILE}" ] ; then
+    LOGIN_PASSWORD=$(cat "${LOGIN_PASSWORD_FILE}")
+  fi
   _echo "Logging in"
   echo "${LOGIN_PASSWORD}" | docker login -u "${LOGIN_USER}" --password-stdin "${LOGIN_REGISTRY}"
 fi

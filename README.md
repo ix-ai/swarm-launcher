@@ -29,11 +29,12 @@ docker build -t swarm-launcher .
 
 The following environment variables are important, if you plan on using a private repository:
 
-| **Variable**     |
-|:-----------------|
-| `LOGIN_USER`     |
-| `LOGIN_PASSWORD` |
-| `LOGIN_REGISTRY` |
+| **Variable**          |
+|:----------------------|
+| `LOGIN_USER`          |
+| `LOGIN_PASSWORD`      |
+| `LOGIN_PASSWORD_FILE` |
+| `LOGIN_REGISTRY`      |
 
 The following environment variables are important if you don't supply a `/docker-compose.yml` file in the swarm-launcher container:
 
