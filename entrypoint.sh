@@ -64,6 +64,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_SERVICE_NAME'
     'LAUNCH_CONTAINER_NAME'
     'LAUNCH_PRIVILEGED'
+    'LAUNCH_HOSTNAME'
     'LAUNCH_ENVIRONMENTS'
     'LAUNCH_DEVICES'
     'LAUNCH_VOLUMES'
@@ -128,6 +129,11 @@ xEOF
   # name the container
   if [ -n "${LAUNCH_CONTAINER_NAME}" ]; then
     echo "    container_name: \"${LAUNCH_CONTAINER_NAME}\"" >> ${COMPOSE_FILE}
+  fi
+
+  # set container hostname
+  if [ -n "${LAUNCH_HOSTNAME}" ]; then
+    echo "    hostname: \"${LAUNCH_HOSTNAME}\"" >> ${COMPOSE_FILE}
   fi
 
   # run in privileged mode
