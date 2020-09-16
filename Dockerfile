@@ -1,5 +1,5 @@
 # Multi-arch docker-compose image
-FROM ixdotai/docker-compose:1.27.2
+FROM ixdotai/docker-compose:1.27.3
 LABEL maintainer="docker@ix.ai"\
       ai.ix.repository="ix.ai/swarm-launcher"
 
