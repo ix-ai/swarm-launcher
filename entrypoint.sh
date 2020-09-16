@@ -9,6 +9,7 @@ _term() {
 _cleanup(){
   _echo "Cleaning up"
   docker-compose --project-name "${LAUNCH_PROJECT_NAME}" down --remove-orphans
+  exit $?
 }
 
 _startup_check(){
@@ -100,7 +101,7 @@ if [ "${CREATE_COMPOSE_FILE}" == "true" ]; then
   fi
 
   if [ -z "${LAUNCH_PROJECT_NAME}" ]; then
-    LAUNCH_PROJECT_NAME="swarm-launcher"
+    LAUNCH_PROJECT_NAME="sl-$(tr -cd '[:alnum:]' < /dev/urandom | fold -w6 | head -n1)"
   fi
 
   # sets a default name for the service
@@ -274,12 +275,13 @@ fi
 # Ensures that a stop of this container cleans up any stranded services
 trap _term SIGTERM
 
+_echo "-----------------------------------"
 docker-compose --project-name "${LAUNCH_PROJECT_NAME}" up \
                --force-recreate\
                --abort-on-container-exit\
                --remove-orphans\
                --no-color &
-echo "------------------------------------------------------"
+
 child=$!
 wait "$child"
 _cleanup
