@@ -41,7 +41,7 @@ The following environment variables are important if you don't supply a `/docker
 | **Variable**            | **Default**                | **Mandatory** | **Description**                                 |
 |:------------------------|:--------------------------:|:-------------:|:------------------------------------------------|
 | `LAUNCH_IMAGE`          | -                          | **YES**       | The image for the container |
-| `LAUNCH_PROJECT_NAME`   | `swarm-launcher`           | NO            | If you want to use a specific name for the project (similar to the stack name) |
+| `LAUNCH_PROJECT_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the project (similar to the stack name) |
 | `LAUNCH_SERVICE_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the service |
 | `LAUNCH_CONTAINER_NAME` | random (by docker)         | NO            | If you want to use a specific name for the container (similar to the task name) |
 | `LAUNCH_HOSTNAME`       | -                          | NO            | If you want to use a specific hostname for the container |
