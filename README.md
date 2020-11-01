@@ -68,6 +68,7 @@ The following environment variables are important if you don't supply a `/docker
 ## Resources:
 * GitLab: https://gitlab.com/ix.ai/swarm-launcher
 * GitHub: https://github.com/ix-ai/swarm-launcher
+* GitLab Registry: https://gitlab.com/ix.ai/swarm-launcher/container_registry
 * Docker Hub: https://hub.docker.com/r/ixdotai/swarm-launcher
 
 ## Credits

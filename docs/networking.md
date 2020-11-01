@@ -42,7 +42,7 @@ services:
         delay: 5s
       labels:
         ai.ix.auto-update: 'true'
-    image: ixdotai/swarm-launcher:latest
+    image: registry.gitlab.com/ix.ai/swarm-launcher:latest
     networks:
       - runners
     volumes:
@@ -139,7 +139,7 @@ services:
     deploy:
       labels:
         ai.ix.auto-update: 'true'
-    image: ixdotai/swarm-launcher:latest
+    image: registry.gitlab.com/ix.ai/swarm-launcher:latest
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:rw'
     environment:
@@ -162,7 +162,7 @@ And then, let's check the progress (it may take a while):
 ```sh
 $ docker service ls
 ID                  NAME                         MODE                REPLICAS            IMAGE                           PORTS
-71oyeqy0rnqc        ci-runners_runner-launcher   replicated          1/1                 ixdotai/swarm-launcher:latest
+71oyeqy0rnqc        ci-runners_runner-launcher   replicated          1/1                 registry.gitlab.com/ix.ai/swarm-launcher:latest
 ```
 
 <details>
@@ -173,7 +173,7 @@ ID:		71oyeqy0rnqcilnd9wsgp3juz
 Name:		ci-runners_runner-launcher
 Labels:
  ai.ix.auto-update=true
- com.docker.stack.image=ixdotai/swarm-launcher:latest
+ com.docker.stack.image=registry.gitlab.com/ix.ai/swarm-launcher:latest
  com.docker.stack.namespace=ci-runners
 Service Mode:	Replicated
  Replicas:	1
@@ -191,7 +191,7 @@ RollbackConfig:
  Max failure ratio: 0
  Rollback order:    stop-first
 ContainerSpec:
- Image:		ixdotai/swarm-launcher:latest@sha256:2eb4d8fbc67ca15e31a6ed07ac08b3f38c4e82e46abda5c2410cc61b976518d0
+ Image:		registry.gitlab.com/ix.ai/swarm-launcher:latest@sha256:2eb4d8fbc67ca15e31a6ed07ac08b3f38c4e82e46abda5c2410cc61b976518d0
  Env:		LAUNCH_COMMAND=run --listen-address=:9252 --user=gitlab-runner --working-directory=/home/gitlab-runner LAUNCH_EXT_NETWORKS=traefik-web LAUNCH_IMAGE=gitlab/gitlab-runner:alpine LAUNCH_PRIVILEGED=true LAUNCH_PULL=true LAUNCH_VOLUMES=/var/run/docker.sock:/var/run/docker.sock:rw /var/storage/docker/gitlab-runner:/etc/gitlab-runner:rw
 Mounts:
  Target:	/var/run/docker.sock
@@ -482,7 +482,7 @@ services:
     deploy:
       labels:
         ai.ix.auto-update: 'true'
-    image: ixdotai/swarm-launcher:latest
+    image: registry.gitlab.com/ix.ai/swarm-launcher:latest
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:rw'
     environment:
@@ -572,7 +572,7 @@ services:
     deploy:
       labels:
         ai.ix.auto-update: 'true'
-    image: ixdotai/swarm-launcher:latest
+    image: registry.gitlab.com/ix.ai/swarm-launcher:latest
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock:rw'
     environment:
@@ -594,7 +594,7 @@ Updating service ci-runner-starter_runner-launcher (id: jvxr6ukkailli4n6d1lpcbro
 $ docker ps -f name=ci-runner
 CONTAINER ID        IMAGE                           COMMAND                  CREATED              STATUS              PORTS               NAMES
 1f859f84aef7        gitlab/gitlab-runner:alpine     "/usr/bin/dumb-init …"   About a minute ago   Up About a minute                       ci-runner_jzwdPf_1
-915bc20df741        ixdotai/swarm-launcher:latest   "/bin/sh -c /entrypo…"   About a minute ago   Up About a minute                       ci-runner-starter_runner-launcher.1.i7qxfidjdd4oo2yb99m8f6en3
+915bc20df741        registry.gitlab.com/ix.ai/swarm-launcher:latest   "/bin/sh -c /entrypo…"   About a minute ago   Up About a minute                       ci-runner-starter_runner-launcher.1.i7qxfidjdd4oo2yb99m8f6en3
 ```
 
 <details>

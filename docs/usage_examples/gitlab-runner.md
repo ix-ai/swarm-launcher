@@ -14,7 +14,7 @@ services:
         delay: 5s
       labels:
         ai.ix.auto-update: 'true'
-    image: ixdotai/swarm-launcher:latest
+    image: registry.gitlab.com/ix.ai/swarm-launcher:latest
     networks:
       - runners
     volumes:
@@ -56,11 +56,11 @@ After a minute or two, you will see everything running:
 ```sh
 $ sudo docker service ls -f name=runner
 ID                  NAME                      MODE                REPLICAS            IMAGE                               PORTS
-vxgmp8v25kkk        runners_runner-launcher   global              3/3                 ixdotai/swarm-launcher:latest
+vxgmp8v25kkk        runners_runner-launcher   global              3/3                 registry.gitlab.com/ix.ai/swarm-launcher:latest
 $ sudo docker ps -f name=runner
 CONTAINER ID        IMAGE                               COMMAND                  CREATED              STATUS                        PORTS               NAMES
 371f43b30bd3        gitlab/gitlab-runner:alpine         "/usr/bin/dumb-init …"   About a minute ago   Up About a minute                                 gitlab-ci-runner
-15be5268f736        ixdotai/swarm-launcher:latest       "/bin/sh -c /entrypo…"   About a minute ago   Up About a minute (healthy)                       runners_runner-launcher.wgay0ielark3a2wgnthkvy7fc.swq8jqxmonm4ay5gxjb62a2n0
+15be5268f736        registry.gitlab.com/ix.ai/swarm-launcher:latest       "/bin/sh -c /entrypo…"   About a minute ago   Up About a minute (healthy)                       runners_runner-launcher.wgay0ielark3a2wgnthkvy7fc.swq8jqxmonm4ay5gxjb62a2n0
 ```
 
 Since **swarm-launcher** generates a `docker-compose.yml` file, this is how the file looks like (after applying `docker-compose config`):
