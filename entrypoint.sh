@@ -82,6 +82,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_COMMAND'
     'LAUNCH_CGROUP_PARENT'
     'LAUNCH_STOP_GRACE_PERIOD'
+    'LAUNCH_PID_MODE'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -212,6 +213,11 @@ xEOF
   # stop grace period
   if [ -n "${LAUNCH_STOP_GRACE_PERIOD}" ]; then
     echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> ${COMPOSE_FILE}
+  fi
+
+  # stop grace period
+  if [ "${LAUNCH_PID_MODE:-}x" = "hostx" ]; then
+    echo "    pid: host" >> ${COMPOSE_FILE}
   fi
 
   # run on the host network - it's incompatible with ports or with named networks
