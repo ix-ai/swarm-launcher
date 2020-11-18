@@ -84,6 +84,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_STOP_GRACE_PERIOD'
     'LAUNCH_PID_MODE'
     'LAUNCH_ULIMITS'
+    'LAUNCH_EXTRA_HOSTS'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -228,6 +229,14 @@ xEOF
     for ULIMIT in "${ARR[@]}"; do
       IFS='=' read -r ULIMIT_KEY ULIMIT_VALUE <<< "${ULIMIT}"
       echo "      ${ULIMIT_KEY}: ${ULIMIT_VALUE}" >> ${COMPOSE_FILE}
+    done
+  fi
+
+  # extra_hosts
+  if [ -n "${LAUNCH_EXTRA_HOSTS}" ]; then
+    echo "    extra_hosts:" >> ${COMPOSE_FILE}
+    for EXTRA_HOST in ${LAUNCH_EXTRA_HOSTS}; do
+      echo "      - \"$EXTRA_HOST\"" >> ${COMPOSE_FILE}
     done
   fi
 
