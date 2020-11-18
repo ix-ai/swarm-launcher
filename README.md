@@ -64,6 +64,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_STOP_GRACE_PERIOD` | `10s` (by docker)       | NO            | Allows to override the default [stop_grace_period](https://docs.docker.com/compose/compose-file/#stop_grace_period). **Note**: It makes sense to also add a slightly higher `stop_grace_period` to the `swarm-launcher` stack as well! |
 | `LAUNCH_PID_MODE`       | -                          | NO            | Set this to `host` to enable PID address space sharing between container and host operating system |
 | `LAUNCH_ULIMITS`        | -                          | NO            | Space separated list of Key=Value pairs. **Note**: Only integers are supported, NOT hard/soft ulimits! Example: `nproc=131072 nofile=60000 core=0` |
+| `LAUNCH_EXTRA_HOSTS`    | -                          | NO            | Space separated list of HostName:Mapping pairs |
 
 **Note**: Make sure you check out the [documentation](docs/).
 
