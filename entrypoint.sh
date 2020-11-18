@@ -83,6 +83,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_CGROUP_PARENT'
     'LAUNCH_STOP_GRACE_PERIOD'
     'LAUNCH_PID_MODE'
+    'LAUNCH_ULIMITS'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -218,6 +219,16 @@ xEOF
   # stop grace period
   if [ "${LAUNCH_PID_MODE:-}x" = "hostx" ]; then
     echo "    pid: host" >> ${COMPOSE_FILE}
+  fi
+
+  # ulimits
+  if [ -n "${LAUNCH_ULIMITS}" ]; then
+    echo "    ulimits:" >> ${COMPOSE_FILE}
+    read -ra ARR <<<"${LAUNCH_ULIMITS}"
+    for ULIMIT in "${ARR[@]}"; do
+      IFS='=' read -r ULIMIT_KEY ULIMIT_VALUE <<< "${ULIMIT}"
+      echo "      ${ULIMIT_KEY}: ${ULIMIT_VALUE}" >> ${COMPOSE_FILE}
+    done
   fi
 
   # run on the host network - it's incompatible with ports or with named networks
