@@ -113,10 +113,10 @@ if [ "${CREATE_COMPOSE_FILE}" == "true" ]; then
   fi
 
   cat <<xEOF > ${COMPOSE_FILE}
-version: "3.7"
+version: "3.8"
 
 services:
-  ${LAUNCH_SERVICE_NAME}:
+  "${LAUNCH_SERVICE_NAME}":
     image: "${LAUNCH_IMAGE}"
     restart: "no"
     labels:

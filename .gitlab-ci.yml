@@ -1,3 +1,4 @@
+---
 variables:
   DOCKERHUB_REPO_NAME: swarm-launcher
   ENABLE_ARM64: 'true'

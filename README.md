@@ -15,6 +15,15 @@ The image uses `docker-compose` to start a new project (see `LAUNCH_PROJECT_NAME
 
 Either way, `swarm-launcher` takes care of the setup, tear-down and cleanup of the project.
 
+## Supported architectures
+
+The following architectures are supported by this image:
+
+* `linux/amd64`
+* `linux/arm64`
+* `linux/arm/v7`
+* `linux/arm/v6`
+
 ## Docs and Usage examples
 
 See [Docs](docs/) and [Usage Examples](docs/usage_examples)

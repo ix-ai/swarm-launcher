@@ -6,7 +6,7 @@ LABEL maintainer="docker@ix.ai"\
 RUN apk add --no-cache bash curl jq
 
 # add entrypoint.sh launcher script
-ADD entrypoint.sh /
+COPY entrypoint.sh /
 
 # run the image
-ENTRYPOINT /entrypoint.sh
+ENTRYPOINT ["/entrypoint.sh"]
