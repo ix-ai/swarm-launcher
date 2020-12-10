@@ -116,7 +116,7 @@ if [ "${CREATE_COMPOSE_FILE}" == "true" ]; then
 version: "3.8"
 
 services:
-  ${LAUNCH_SERVICE_NAME}:
+  "${LAUNCH_SERVICE_NAME}":
     image: "${LAUNCH_IMAGE}"
     restart: "no"
     labels:
