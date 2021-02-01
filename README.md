@@ -54,6 +54,8 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_SERVICE_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the service |
 | `LAUNCH_CONTAINER_NAME` | random (by docker)         | NO            | If you want to use a specific name for the container (similar to the task name) |
 | `LAUNCH_HOSTNAME`       | -                          | NO            | If you want to use a specific hostname for the container |
+| `LAUNCH_IPV4_ADDRESS`   | -                          | NO            | If you want to use a specific IPv4 address for the container |
+| `LAUNCH_IPV6_ADDRESS`   | -                          | NO            | If you want to use a specific IPv6 address for the container |
 | `LAUNCH_PRIVILEGED`     | `false`                    | NO            | Set this to `true` if you want to start a privileged container |
 | `LAUNCH_ENVIRONMENTS`   | -                          | NO            | Space separated list of Key=Value pairs. **Note**: `@_@` gets replaced with a single whitespace, so you can expose environment values containing spaces. |
 | `LAUNCH_DEVICES`        | -                          | NO            | Space separated list of DeviceOnHost:DeviceInContainer |
