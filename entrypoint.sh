@@ -67,7 +67,6 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_PRIVILEGED'
     'LAUNCH_HOSTNAME'
     'LAUNCH_IPV4_ADDRESS'
-    'LAUNCH_IPV6_ADDRESS'
     'LAUNCH_ENVIRONMENTS'
     'LAUNCH_DEVICES'
     'LAUNCH_VOLUMES'
@@ -255,15 +254,12 @@ xEOF
     if [ -n "${LAUNCH_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
       echo "    networks:" >> ${COMPOSE_FILE}
       for NETWORK in ${LAUNCH_NETWORKS}; do
-        echo "      - ${NETWORK}" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
       done
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
         echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
         if [ -n "${LAUNCH_IPV4_ADDRESS}" ]; then
           echo "        ipv4_address: ${LAUNCH_IPV4_ADDRESS}" >> ${COMPOSE_FILE}
-        fi
-        if [ -n "${LAUNCH_IPV6_ADDRESS}" ]; then
-          echo "        ipv6_address: ${LAUNCH_IPV6_ADDRESS}" >> ${COMPOSE_FILE}
         fi
       done
       echo "networks:" >> ${COMPOSE_FILE}
