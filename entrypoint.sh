@@ -73,6 +73,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_PORTS'
     'LAUNCH_NETWORKS'
     'LAUNCH_EXT_NETWORKS'
+    'LAUNCH_EXT_NETWORKS_IPV4'
     'LAUNCH_CAP_ADD'
     'LAUNCH_CAP_DROP'
     'LAUNCH_SECURITY_OPT'
@@ -253,10 +254,18 @@ xEOF
     if [ -n "${LAUNCH_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
       echo "    networks:" >> ${COMPOSE_FILE}
       for NETWORK in ${LAUNCH_NETWORKS}; do
-        echo "      - ${NETWORK}" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
       done
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
-        echo "      - ${NETWORK}" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
+        if [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
+          for NETWORK_IPV4 in ${LAUNCH_EXT_NETWORKS_IPV4}; do
+            if [ "${NETWORK_IPV4%%:*}" = "${NETWORK}" ]; then
+              echo "        ipv4_address: ${NETWORK_IPV4##*:}" >> ${COMPOSE_FILE}
+              break
+            fi
+          done
+        fi
       done
       echo "networks:" >> ${COMPOSE_FILE}
       for NETWORK in ${LAUNCH_NETWORKS}; do
