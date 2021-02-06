@@ -296,12 +296,16 @@ xEOF
           echo "    external: true";
         } >> ${COMPOSE_FILE}
       done
-      for NETWORK in ${LAUNCH_EXT_NETWORKS_IPV4}; do
-        {
-          echo "  ${NETWORK}:";
-          echo "    external: true";
-        } >> ${COMPOSE_FILE}
-      done
+      if [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
+        read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV4}"
+        for NETWORK in "${ARR[@]}"; do
+          IFS=':' read -r NETWORK IPV4 <<< "${NETWORK}"
+          {
+            echo "  ${NETWORK}:";
+            echo "    external: true";
+          } >> ${COMPOSE_FILE}
+        done
+      fi
     fi
   fi
 fi
