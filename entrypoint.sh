@@ -73,6 +73,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_PORTS'
     'LAUNCH_NETWORKS'
     'LAUNCH_EXT_NETWORKS'
+    'LAUNCH_EXT_NETWORKS_IPV4'
     'LAUNCH_CAP_ADD'
     'LAUNCH_CAP_DROP'
     'LAUNCH_SECURITY_OPT'
@@ -250,14 +251,37 @@ xEOF
         echo "      - \"$PORT\"" >> ${COMPOSE_FILE}
       done
     fi
-    if [ -n "${LAUNCH_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
+
+    ##
+    # The three major network variables:
+    # LAUNCH_NETWORKS
+    # LAUNCH_EXT_NETWORKS
+    # LAUNCH_EXT_NETWORKS_IPV4
+    #
+    # Keep them separated for better readability and easier treoubleshooting, at the cost of code duplication
+    ##
+    if [ -n "${LAUNCH_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
+      # LAUNCH_NETWORKS are networks that get created on the fly, at start
       echo "    networks:" >> ${COMPOSE_FILE}
       for NETWORK in ${LAUNCH_NETWORKS}; do
-        echo "      - ${NETWORK}" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
       done
+      # LAUNCH_EXT_NETWORKS are existing attachable networks
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
-        echo "      - ${NETWORK}" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
       done
+      # LAUNCH_EXT_NETWORKS_IPV4 are existing attachable networks, where the IP is manually assigned
+      # The format is `network1:ip1 network2:ip2 ... networkN:ipN`
+      if [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
+        read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV4}"
+        for NETWORK in "${ARR[@]}"; do
+          IFS=':' read -r NETWORK IPV4 <<< "${NETWORK}"
+          {
+            echo "      ${NETWORK}:"
+            echo "        ipv4_address: ${IPV4}"
+          } >> ${COMPOSE_FILE}
+        done
+      fi
       echo "networks:" >> ${COMPOSE_FILE}
       for NETWORK in ${LAUNCH_NETWORKS}; do
         {
@@ -272,6 +296,16 @@ xEOF
           echo "    external: true";
         } >> ${COMPOSE_FILE}
       done
+      if [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
+        read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV4}"
+        for NETWORK in "${ARR[@]}"; do
+          IFS=':' read -r NETWORK IPV4 <<< "${NETWORK}"
+          {
+            echo "  ${NETWORK}:";
+            echo "    external: true";
+          } >> ${COMPOSE_FILE}
+        done
+      fi
     fi
   fi
 fi
