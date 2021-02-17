@@ -1,5 +1,5 @@
 # Multi-arch docker-compose image
-FROM registry.gitlab.com/ix.ai/docker-compose:1.28.2
+FROM registry.gitlab.com/ix.ai/docker-compose:1.28.3
 LABEL maintainer="docker@ix.ai"\
       ai.ix.repository="ix.ai/swarm-launcher"
 
