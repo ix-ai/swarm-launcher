@@ -86,6 +86,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_PID_MODE'
     'LAUNCH_ULIMITS'
     'LAUNCH_EXTRA_HOSTS'
+    'LAUNCH_DNS'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -238,6 +239,14 @@ xEOF
     echo "    extra_hosts:" >> ${COMPOSE_FILE}
     for EXTRA_HOST in ${LAUNCH_EXTRA_HOSTS}; do
       echo "      - \"$EXTRA_HOST\"" >> ${COMPOSE_FILE}
+    done
+  fi
+  
+  # Custom dns
+  if [ -n "${LAUNCH_DNS}" ]; then
+    echo "    dns:" >> ${COMPOSE_FILE}
+    for DNS in ${LAUNCH_DNS}; do
+      echo "      - ${DNS}:" >> ${COMPOSE_FILE}
     done
   fi
 
