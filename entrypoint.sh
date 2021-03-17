@@ -87,6 +87,7 @@ if [ -f ${COMPOSE_FILE} ]; then
     'LAUNCH_ULIMITS'
     'LAUNCH_EXTRA_HOSTS'
     'LAUNCH_DNS'
+    'LAUNCH_DNS_SEARCH'
   )
   for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
@@ -242,13 +243,22 @@ xEOF
     done
   fi
   
-  # Custom dns
+  # Custom DNS
   if [ -n "${LAUNCH_DNS}" ]; then
     echo "    dns:" >> ${COMPOSE_FILE}
     for DNS in ${LAUNCH_DNS}; do
-      echo "      - ${DNS}:" >> ${COMPOSE_FILE}
+      echo "      - \"$DNS\"" >> ${COMPOSE_FILE}
     done
   fi
+  
+  # Custom DNS Search domains
+  if [ -n "${LAUNCH_DNS_SEARCH}" ]; then
+    echo "    dns_search:" >> ${COMPOSE_FILE}
+    for DOMAIN in ${LAUNCH_DNS_SEARCH}; do
+      echo "      - ${DOMAIN}" >> ${COMPOSE_FILE}
+    done
+  fi
+  
 
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then

@@ -75,6 +75,8 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_PID_MODE`       | -                          | NO            | Set this to `host` to enable PID address space sharing between container and host operating system |
 | `LAUNCH_ULIMITS`        | -                          | NO            | Space separated list of Key=Value pairs. **Note**: Only integers are supported, NOT hard/soft ulimits! Example: `nproc=131072 nofile=60000 core=0` |
 | `LAUNCH_EXTRA_HOSTS`    | -                          | NO            | Space separated list of HostName:Mapping pairs |
+| `LAUNCH_DNS`            | -                          | NO            | Space separated list of DNS servers |
+| `LAUNCH_DNS_SEARCH`     | -                          | NO            | Space separated list of DNS search domains |
 
 **Note**: Make sure you check out the [documentation](docs/).
 
