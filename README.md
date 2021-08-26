@@ -77,6 +77,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_EXTRA_HOSTS`    | -                          | NO            | Space separated list of HostName:Mapping pairs |
 | `LAUNCH_DNS`            | -                          | NO            | Space separated list of DNS servers |
 | `LAUNCH_DNS_SEARCH`     | -                          | NO            | Space separated list of DNS search domains |
+| `LAUNCH_MAC_ADDRESS`    | -                          | NO            | Valid mac address for the launched container |
 
 **Note**: Make sure you check out the [documentation](docs/).
 
