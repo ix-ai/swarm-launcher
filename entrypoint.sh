@@ -259,6 +259,10 @@ xEOF
     done
   fi
   
+  # Specific Mac Address for the container
+  if [ -n "${LAUNCH_MAC_ADDRESS}" ]; then
+    echo "    mac_address: ${LAUNCH_MAC_ADDRESS}" >> ${COMPOSE_FILE}
+  fi
 
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then
