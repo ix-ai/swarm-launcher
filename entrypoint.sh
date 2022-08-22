@@ -8,13 +8,13 @@ _term() {
 
 _cleanup(){
   _echo "Cleaning up"
-  docker-compose --project-name "${LAUNCH_PROJECT_NAME}" down --remove-orphans
+  docker compose --project-name "${LAUNCH_PROJECT_NAME}" down --remove-orphans
   exit $?
 }
 
 _startup_check(){
   _echo "Doing startup check"
-  
+
   # Check that no conflicting options are passed and display warning
   if [ "${LAUNCH_HOST_NETWORK}" == true ]; then
     if [ -n "${LAUNCH_PORTS}" ]; then
@@ -56,7 +56,7 @@ _echo(){
 COMPOSE_FILE="/docker-compose.yml"
 
 CREATE_COMPOSE_FILE=true
-if [ -f ${COMPOSE_FILE} ]; then
+if [ -f "${COMPOSE_FILE}" ]; then
   _echo "Detected mounted docker-compose.yml file"
 
   LAUNCH_VARIABLES=(
@@ -115,7 +115,7 @@ if [ "${CREATE_COMPOSE_FILE}" == "true" ]; then
     LAUNCH_SERVICE_NAME="$(tr -cd '[:alnum:]' < /dev/urandom | fold -w6 | head -n1)"
   fi
 
-  cat <<xEOF > ${COMPOSE_FILE}
+  cat <<xEOF > "${COMPOSE_FILE}"
 version: "3.8"
 
 services:
@@ -129,149 +129,149 @@ xEOF
   # additional labels for the container
   if [ -n "${LAUNCH_LABELS}" ]; then
     for LABEL in ${LAUNCH_LABELS}; do
-      echo "      - \"${LABEL}\"" >> ${COMPOSE_FILE}
+      echo "      - \"${LABEL}\"" >> "${COMPOSE_FILE}"
     done
   fi
 
   # name the container
   if [ -n "${LAUNCH_CONTAINER_NAME}" ]; then
-    echo "    container_name: \"${LAUNCH_CONTAINER_NAME}\"" >> ${COMPOSE_FILE}
+    echo "    container_name: \"${LAUNCH_CONTAINER_NAME}\"" >> "${COMPOSE_FILE}"
   fi
 
   # set container hostname
   if [ -n "${LAUNCH_HOSTNAME}" ]; then
-    echo "    hostname: \"${LAUNCH_HOSTNAME}\"" >> ${COMPOSE_FILE}
+    echo "    hostname: \"${LAUNCH_HOSTNAME}\"" >> "${COMPOSE_FILE}"
   fi
 
   # run in privileged mode
   if [ "${LAUNCH_PRIVILEGED}" = true ]; then
-    echo "    privileged: \"true\"" >> ${COMPOSE_FILE}
+    echo "    privileged: \"true\"" >> "${COMPOSE_FILE}"
   fi
   
   # specify an optional parent cgroup for the container
   if [ "${LAUNCH_CGROUP_PARENT}" = true ]; then
-    echo "    cgroup_parent: ${LAUNCH_CGROUP_PARENT}" >> ${COMPOSE_FILE}
+    echo "    cgroup_parent: ${LAUNCH_CGROUP_PARENT}" >> "${COMPOSE_FILE}"
   fi
 
   # the environment variables
   if [ -n "${LAUNCH_ENVIRONMENTS}" ]; then
-    echo "    environment:" >> ${COMPOSE_FILE}
+    echo "    environment:" >> "${COMPOSE_FILE}"
     read -ra ARR <<<"${LAUNCH_ENVIRONMENTS}"
     for ENVIRONMENT in "${ARR[@]}"; do
-      echo "      - ${ENVIRONMENT//@_@/' '}" >> ${COMPOSE_FILE}
+      echo "      - ${ENVIRONMENT//@_@/' '}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # devices
   if [ -n "${LAUNCH_DEVICES}" ]; then
-    echo "    devices:" >> ${COMPOSE_FILE}
+    echo "    devices:" >> "${COMPOSE_FILE}"
     for DEVICE in ${LAUNCH_DEVICES}; do
-      echo "      - ${DEVICE}" >> ${COMPOSE_FILE}
+      echo "      - ${DEVICE}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # the volumes
   if [ -n "${LAUNCH_VOLUMES}" ]; then
-    echo "    volumes:" >> ${COMPOSE_FILE}
+    echo "    volumes:" >> "${COMPOSE_FILE}"
     for VOLUME in ${LAUNCH_VOLUMES}; do
-      echo "      - ${VOLUME}" >> ${COMPOSE_FILE}
+      echo "      - ${VOLUME}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # Add capabilities
   if [ -n "${LAUNCH_CAP_ADD}" ]; then
-    echo "    cap_add:" >> ${COMPOSE_FILE}
+    echo "    cap_add:" >> "${COMPOSE_FILE}"
     for CAP in ${LAUNCH_CAP_ADD}; do
-      echo "      - ${CAP}" >> ${COMPOSE_FILE}
+      echo "      - ${CAP}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # Drop capabilities
   if [ -n "${LAUNCH_CAP_DROP}" ]; then
-    echo "    cap_drop:" >> ${COMPOSE_FILE}
-    for CAP in ${LAUNCH_CAP_DOP}; do
-      echo "      - ${CAP}" >> ${COMPOSE_FILE}
+    echo "    cap_drop:" >> "${COMPOSE_FILE}"
+    for CAP in ${LAUNCH_CAP_DROP}; do
+      echo "      - ${CAP}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # Security opt
   if [ -n "${LAUNCH_SECURITY_OPT}" ]; then
-    echo "    security_opt:" >> ${COMPOSE_FILE}
+    echo "    security_opt:" >> "${COMPOSE_FILE}"
     for SECURITY_OPT in ${LAUNCH_SECURITY_OPT}; do
-      echo "      - ${SECURITY_OPT}" >> ${COMPOSE_FILE}
+      echo "      - ${SECURITY_OPT}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # sysctls
   if [ -n "${LAUNCH_SYSCTLS}" ]; then
-    echo "    sysctls:" >> ${COMPOSE_FILE}
+    echo "    sysctls:" >> "${COMPOSE_FILE}"
     for SYSCTL in ${LAUNCH_SYSCTLS}; do
-      echo "      - ${SYSCTL}" >> ${COMPOSE_FILE}
+      echo "      - ${SYSCTL}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # Override the command
   if [ -n "${LAUNCH_COMMAND}" ]; then
-    echo "    command: \"${LAUNCH_COMMAND}\"" >> ${COMPOSE_FILE}
+    echo "    command: \"${LAUNCH_COMMAND}\"" >> "${COMPOSE_FILE}"
   fi
-  
+
   # stop grace period
   if [ -n "${LAUNCH_STOP_GRACE_PERIOD}" ]; then
-    echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> ${COMPOSE_FILE}
+    echo "    stop_grace_period: ${LAUNCH_STOP_GRACE_PERIOD}" >> "${COMPOSE_FILE}"
   fi
 
   # stop grace period
   if [ "${LAUNCH_PID_MODE:-}x" = "hostx" ]; then
-    echo "    pid: host" >> ${COMPOSE_FILE}
+    echo "    pid: host" >> "${COMPOSE_FILE}"
   fi
 
   # ulimits
   if [ -n "${LAUNCH_ULIMITS}" ]; then
-    echo "    ulimits:" >> ${COMPOSE_FILE}
+    echo "    ulimits:" >> "${COMPOSE_FILE}"
     read -ra ARR <<<"${LAUNCH_ULIMITS}"
     for ULIMIT in "${ARR[@]}"; do
       IFS='=' read -r ULIMIT_KEY ULIMIT_VALUE <<< "${ULIMIT}"
-      echo "      ${ULIMIT_KEY}: ${ULIMIT_VALUE}" >> ${COMPOSE_FILE}
+      echo "      ${ULIMIT_KEY}: ${ULIMIT_VALUE}" >> "${COMPOSE_FILE}"
     done
   fi
 
   # extra_hosts
   if [ -n "${LAUNCH_EXTRA_HOSTS}" ]; then
-    echo "    extra_hosts:" >> ${COMPOSE_FILE}
+    echo "    extra_hosts:" >> "${COMPOSE_FILE}"
     for EXTRA_HOST in ${LAUNCH_EXTRA_HOSTS}; do
-      echo "      - \"$EXTRA_HOST\"" >> ${COMPOSE_FILE}
+      echo "      - \"${EXTRA_HOST}\"" >> "${COMPOSE_FILE}"
     done
   fi
-  
+
   # Custom DNS
   if [ -n "${LAUNCH_DNS}" ]; then
-    echo "    dns:" >> ${COMPOSE_FILE}
+    echo "    dns:" >> "${COMPOSE_FILE}"
     for DNS in ${LAUNCH_DNS}; do
-      echo "      - \"$DNS\"" >> ${COMPOSE_FILE}
+      echo "      - \"${DNS}\"" >> "${COMPOSE_FILE}"
     done
   fi
-  
+
   # Custom DNS Search domains
   if [ -n "${LAUNCH_DNS_SEARCH}" ]; then
-    echo "    dns_search:" >> ${COMPOSE_FILE}
+    echo "    dns_search:" >> "${COMPOSE_FILE}"
     for DOMAIN in ${LAUNCH_DNS_SEARCH}; do
-      echo "      - ${DOMAIN}" >> ${COMPOSE_FILE}
+      echo "      - ${DOMAIN}" >> "${COMPOSE_FILE}"
     done
   fi
-  
+
   # Specific Mac Address for the container
   if [ -n "${LAUNCH_MAC_ADDRESS}" ]; then
-    echo "    mac_address: ${LAUNCH_MAC_ADDRESS}" >> ${COMPOSE_FILE}
+    echo "    mac_address: ${LAUNCH_MAC_ADDRESS}" >> "${COMPOSE_FILE}"
   fi
 
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then
-    echo "    network_mode: host" >> ${COMPOSE_FILE}
+    echo "    network_mode: host" >> "${COMPOSE_FILE}"
   else
     if [ -n "${LAUNCH_PORTS}" ]; then
-      echo "    ports:" >> ${COMPOSE_FILE}
+      echo "    ports:" >> "${COMPOSE_FILE}"
       for PORT in ${LAUNCH_PORTS}; do
-        echo "      - \"$PORT\"" >> ${COMPOSE_FILE}
+        echo "      - \"$PORT\"" >> "${COMPOSE_FILE}"
       done
     fi
 
@@ -285,13 +285,13 @@ xEOF
     ##
     if [ -n "${LAUNCH_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS}" ] || [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
       # LAUNCH_NETWORKS are networks that get created on the fly, at start
-      echo "    networks:" >> ${COMPOSE_FILE}
+      echo "    networks:" >> "${COMPOSE_FILE}"
       for NETWORK in ${LAUNCH_NETWORKS}; do
-        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> "${COMPOSE_FILE}"
       done
       # LAUNCH_EXT_NETWORKS are existing attachable networks
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
-        echo "      ${NETWORK}:" >> ${COMPOSE_FILE}
+        echo "      ${NETWORK}:" >> "${COMPOSE_FILE}"
       done
       # LAUNCH_EXT_NETWORKS_IPV4 are existing attachable networks, where the IP is manually assigned
       # The format is `network1:ip1 network2:ip2 ... networkN:ipN`
@@ -302,22 +302,22 @@ xEOF
           {
             echo "      ${NETWORK}:"
             echo "        ipv4_address: ${IPV4}"
-          } >> ${COMPOSE_FILE}
+          } >> "${COMPOSE_FILE}"
         done
       fi
-      echo "networks:" >> ${COMPOSE_FILE}
+      echo "networks:" >> "${COMPOSE_FILE}"
       for NETWORK in ${LAUNCH_NETWORKS}; do
         {
           echo "  ${NETWORK}:";
           echo "    driver: bridge";
           echo "    attachable: true";
-        } >> ${COMPOSE_FILE}
+        } >> "${COMPOSE_FILE}"
       done
       for NETWORK in ${LAUNCH_EXT_NETWORKS}; do
         {
           echo "  ${NETWORK}:";
           echo "    external: true";
-        } >> ${COMPOSE_FILE}
+        } >> "${COMPOSE_FILE}"
       done
       if [ -n "${LAUNCH_EXT_NETWORKS_IPV4}" ]; then
         read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV4}"
@@ -326,7 +326,7 @@ xEOF
           {
             echo "  ${NETWORK}:";
             echo "    external: true";
-          } >> ${COMPOSE_FILE}
+          } >> "${COMPOSE_FILE}"
         done
       fi
     fi
@@ -345,9 +345,9 @@ fi
 # tests the config file
 _echo "Testing compose file:"
 _echo "-----------------------------------"
-cat ${COMPOSE_FILE}
+cat "${COMPOSE_FILE}"
 _echo "-----------------------------------"
-docker-compose config
+docker compose config
 
 # pull latest image version
 if [ "${LAUNCH_PULL}" = true ] && [ -n "${LAUNCH_IMAGE}" ] ; then
@@ -359,7 +359,8 @@ fi
 trap _term SIGTERM
 
 _echo "-----------------------------------"
-docker-compose --project-name "${LAUNCH_PROJECT_NAME}" up \
+docker compose --project-name "${LAUNCH_PROJECT_NAME}" up \
+               --always-recreate-deps\
                --force-recreate\
                --abort-on-container-exit\
                --remove-orphans\

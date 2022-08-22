@@ -23,6 +23,11 @@ The following architectures are supported by this image:
 * `linux/arm64`
 * `linux/arm/v7`
 * `linux/arm/v6`
+* `linux/386`
+
+## Deprecations
+
+**WARNING**: Due to the [introduction of storage usage quotas by GitLab](https://docs.gitlab.com/ee/user/usage_quotas.html), the `registry.gitlab.com` images will **not** be updated anymore and will soon be removed. Please switch to either Docker Hub or GitHub (see below).
 
 ## Docs and Usage examples
 
@@ -30,7 +35,7 @@ See [Docs](docs/) and [Usage Examples](docs/usage_examples)
 
 ## Building the image
 
-```
+```sh
 docker build -t swarm-launcher .
 ```
 
@@ -81,11 +86,13 @@ The following environment variables are important if you don't supply a `/docker
 
 **Note**: Make sure you check out the [documentation](docs/).
 
-## Resources:
-* GitLab: https://gitlab.com/ix.ai/swarm-launcher
-* GitHub: https://github.com/ix-ai/swarm-launcher
-* GitLab Registry: https://gitlab.com/ix.ai/swarm-launcher/container_registry
-* Docker Hub: https://hub.docker.com/r/ixdotai/swarm-launcher
+## Resources
+
+* GitLab: [gitlab.com/ix.ai/swarm-launcher](https://gitlab.com/ix.ai/swarm-launcher)
+* GitHub: [github.com/ix-ai/swarm-launcher](https://github.com/ix-ai/swarm-launcher)
+* GitHub Registry: `ghcr.io/ix-ai/swarm-launcher` - [ghcr.io/ix-ai/swarm-launcher](https://ghcr.io/ix-ai/swarm-launcher)
+* Docker Hub: `ixdotai/swarm-launcher` - [hub.docker.com/r/ixdotai/swarm-launcher](https://hub.docker.com/r/ixdotai/swarm-launcher)
 
 ## Credits
+
 This Docker image is inspired by the post by [@akomelj](https://github.com/akomelj) in [moby/moby#25885](https://github.com/moby/moby/issues/25885#issuecomment-573449645)
