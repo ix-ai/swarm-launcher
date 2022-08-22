@@ -145,7 +145,7 @@ xEOF
 
   # run in privileged mode
   if [ "${LAUNCH_PRIVILEGED}" = true ]; then
-    echo "    privileged: \"true\"" >> "${COMPOSE_FILE}"
+    echo "    privileged: true" >> "${COMPOSE_FILE}"
   fi
   
   # specify an optional parent cgroup for the container
