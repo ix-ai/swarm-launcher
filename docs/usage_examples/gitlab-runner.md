@@ -3,6 +3,7 @@
 **Warning**: This creates one runner on every node you have in your swarm. If you don't want that, remove the line with `mode: global`.
 
 First create the file `stack.yml`:
+
 ```yml
 version: "3.7"
 
@@ -14,7 +15,7 @@ services:
         delay: 5s
       labels:
         ai.ix.auto-update: 'true'
-    image: registry.gitlab.com/ix.ai/swarm-launcher:latest
+    image: ghcr.io/ix-ai/swarm-launcher:latest
     networks:
       - runners
     volumes:
@@ -46,6 +47,7 @@ networks:
 ```
 
 Then deploy it on your docker swarm:
+
 ```sh
 $ sudo docker stack deploy --compose-file stack.yml --prune --with-registry-auth runners
 Creating network runners_runners
@@ -53,6 +55,7 @@ Creating service runners_runner-launcher
 ```
 
 After a minute or two, you will see everything running:
+
 ```sh
 $ sudo docker service ls -f name=runner
 ID                  NAME                      MODE                REPLICAS            IMAGE                               PORTS
