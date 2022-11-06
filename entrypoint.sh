@@ -43,6 +43,12 @@ _startup_check(){
     fi
   fi
 
+  if [ -n "${LAUNCH_ARG_ENVFILE}" ]; then
+    if [ ! -f "${LAUNCH_ARG_ENVFILE}" ]; then
+      _echo "ERROR! LAUNCH_ARG_ENVFILE is set but ${LAUNCH_ARG_ENVFILE} cannot be found. Exiting."
+    fi
+  fi
+
   # Check if there's a need to exit now
   if [ "${NEED_EXIT}" == true ]; then
     exit 1
@@ -67,6 +73,7 @@ if [ -f "${COMPOSE_FILE}" ]; then
     'LAUNCH_PRIVILEGED'
     'LAUNCH_HOSTNAME'
     'LAUNCH_ENVIRONMENTS'
+    'LAUNCH_ENVFILES'
     'LAUNCH_DEVICES'
     'LAUNCH_VOLUMES'
     'LAUNCH_HOST_NETWORK'
@@ -147,7 +154,7 @@ xEOF
   if [ "${LAUNCH_PRIVILEGED}" = true ]; then
     echo "    privileged: true" >> "${COMPOSE_FILE}"
   fi
-  
+
   # specify an optional parent cgroup for the container
   if [ "${LAUNCH_CGROUP_PARENT}" = true ]; then
     echo "    cgroup_parent: ${LAUNCH_CGROUP_PARENT}" >> "${COMPOSE_FILE}"
@@ -159,6 +166,15 @@ xEOF
     read -ra ARR <<<"${LAUNCH_ENVIRONMENTS}"
     for ENVIRONMENT in "${ARR[@]}"; do
       echo "      - ${ENVIRONMENT//@_@/' '}" >> "${COMPOSE_FILE}"
+    done
+  fi
+
+  # the environment files
+  if [ -n "${LAUNCH_ENVFILES}" ]; then
+    echo "    env_file:" >> "${COMPOSE_FILE}"
+    read -ra ARR <<<"${LAUNCH_ENVFILES}"
+    for ENVFILE in "${ARR[@]}"; do
+      echo "      - ${ENVFILE}" >> "${COMPOSE_FILE}"
     done
   fi
 
@@ -347,7 +363,14 @@ _echo "Testing compose file:"
 _echo "-----------------------------------"
 cat "${COMPOSE_FILE}"
 _echo "-----------------------------------"
-docker compose config
+
+COMMAND=(
+config
+)
+
+[[ -n "${LAUNCH_ARG_ENVFILE}" ]] && COMMAND=(--env-file "${LAUNCH_ARG_ENVFILE}" "${COMMAND[@]}")
+
+docker compose "${COMMAND[@]}"
 
 # pull latest image version
 if [ "${LAUNCH_PULL}" = true ] && [ -n "${LAUNCH_IMAGE}" ] ; then
@@ -359,13 +382,22 @@ fi
 trap _term SIGTERM
 
 _echo "-----------------------------------"
-docker compose --project-name "${LAUNCH_PROJECT_NAME}" up \
-               --always-recreate-deps\
-               --force-recreate\
-               --abort-on-container-exit\
-               --remove-orphans\
-               --no-color &
+
+COMMAND=(
+--project-name "${LAUNCH_PROJECT_NAME}" up
+--always-recreate-deps
+--force-recreate
+--abort-on-container-exit
+--remove-orphans
+--no-color
+)
+
+[[ -n "${LAUNCH_ARG_ENVFILE}" ]] && COMMAND=(--env-file "${LAUNCH_ARG_ENVFILE}" "${COMMAND[@]}")
+
+# Here is the container started
+docker compose "${COMMAND[@]}" &
 
 child=$!
 wait "$child"
 _cleanup
+
