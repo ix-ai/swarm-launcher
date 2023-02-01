@@ -67,6 +67,8 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_NETWORKS`       | -                          | NO            | Space separated list of project networks to create. All networks are created with `attachable: true` |
 | `LAUNCH_EXT_NETWORKS`   | -                          | NO            | Space separated list of external networks to attach to |
 | `LAUNCH_EXT_NETWORKS_IPV4` | -                       | NO            | Similar to `LAUNCH_EXT_NETWORKS`, this is a space separated list of ExistingExternalNetworkName:Ipv4Address |
+| `LAUNCH_EXT_NETWORKS_IPV6` | -                       | NO            | Similar to `LAUNCH_EXT_NETWORKS`, this is a space separated list of ExistingExternalNetworkName-Ipv6Address |
+| `LAUNCH_EXT_NETWORKS_MIXED` | -                      | NO            | Similar to `LAUNCH_EXT_NETWORKS`, this is a space separated list of ExistingExternalNetworkName-Ipv4Address-Ipv6Address |
 | `LAUNCH_CAP_ADD`        | -                          | NO            | Space separated list of capabilities to add |
 | `LAUNCH_CAP_DROP`       | -                          | NO            | Space separated list of capabilities to drop |
 | `LAUNCH_SECURITY_OPT`   | -                          | NO            | Space separated list of security options to add |
