@@ -336,15 +336,14 @@ xEOF
       if [ -n "${LAUNCH_EXT_NETWORKS_IPV6}" ]; then
         read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV6}"
         for NETWORK in "${ARR[@]}"; do
-          IFS=':' read -r NETWORK IPV6 <<< "${NETWORK}"
+          IFS='-' read -r NETWORK IPV6 <<< "${NETWORK}"
           {
             echo "      ${NETWORK}:"
             echo "        ipv6_address: '${IPV6}'"
           } >> "${COMPOSE_FILE}"
         done
       fi
-      # LAUNCH_EXT_NETWORKS_MIXED are existing attachable networks, where the IP is manually assigned
-      # This assumes both IPv4 and IPv6 addresses are manually assigned
+      # LAUNCH_EXT_NETWORKS_MIXED are existing attachable networks, where the IPV4 and IPV6 is manually assigned
       # The format is `network1-ipv4-ipv6 network2-ipv4-ipv6 ... networkN-ipv4-ipv6`
       if [ -n "${LAUNCH_EXT_NETWORKS_MIXED}" ]; then
         read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_MIXED}"
@@ -357,6 +356,7 @@ xEOF
           } >> "${COMPOSE_FILE}"
         done
       fi
+      # Here starts the `networks` section
       echo "networks:" >> "${COMPOSE_FILE}"
       for NETWORK in ${LAUNCH_NETWORKS}; do
         {
@@ -375,6 +375,26 @@ xEOF
         read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV4}"
         for NETWORK in "${ARR[@]}"; do
           IFS=':' read -r NETWORK IPV4 <<< "${NETWORK}"
+          {
+            echo "  ${NETWORK}:";
+            echo "    external: true";
+          } >> "${COMPOSE_FILE}"
+        done
+      fi
+      if [ -n "${LAUNCH_EXT_NETWORKS_IPV6}" ]; then
+        read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_IPV6}"
+        for NETWORK in "${ARR[@]}"; do
+          IFS='-' read -r NETWORK IPV6 <<< "${NETWORK}"
+          {
+            echo "  ${NETWORK}:";
+            echo "    external: true";
+          } >> "${COMPOSE_FILE}"
+        done
+      fi
+      if [ -n "${LAUNCH_EXT_NETWORKS_MIXED}" ]; then
+        read -ra ARR <<<"${LAUNCH_EXT_NETWORKS_MIXED}"
+        for NETWORK in "${ARR[@]}"; do
+          IFS='-' read -r NETWORK IPV4 IPV6 <<< "${NETWORK}"
           {
             echo "  ${NETWORK}:";
             echo "    external: true";
