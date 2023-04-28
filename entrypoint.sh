@@ -431,9 +431,7 @@ COMMAND=(
 [[ -n "${LAUNCH_ARG_ENVFILE}" ]] && COMMAND=(--env-file "${LAUNCH_ARG_ENVFILE}" "${COMMAND[@]}")
 
 # Here is the container started
-docker compose "${COMMAND[@]}" &
+docker compose "${COMMAND[@]}" & wait $!
 
-child=$!
-wait "$child"
 _cleanup
 
