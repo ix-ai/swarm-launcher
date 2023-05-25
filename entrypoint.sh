@@ -426,6 +426,7 @@ cat "${COMPOSE_FILE}"
 _echo "-----------------------------------"
 
 COMMAND=(
+--project-name "${LAUNCH_PROJECT_NAME}"
 config
 )
 
