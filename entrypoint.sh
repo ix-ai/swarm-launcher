@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
 
 set -e
+
+if [ "${DEBUG}" == 'true' ]; then
+  set -x
+fi
+
 _term() {
   _echo "Caught SIGTERM signal!"
   _cleanup
@@ -421,6 +426,7 @@ cat "${COMPOSE_FILE}"
 _echo "-----------------------------------"
 
 COMMAND=(
+--project-name "${LAUNCH_PROJECT_NAME}"
 config
 )
 
