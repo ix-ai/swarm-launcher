@@ -21,15 +21,18 @@ _startup_check(){
   _echo "Doing startup check"
 
   # Check that no conflicting options are passed and display warning
-  if [ "${LAUNCH_HOST_NETWORK}" == true ]; then
+  if [ "${LAUNCH_HOST_NETWORK}" == true ] || [ -n "${LAUNCH_NETWORK_MODE}" ]; then
+    if [ "${LAUNCH_HOST_NETWORK}" == true ] && [ -n "${LAUNCH_NETWORK_MODE}" ]; then
+      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_NETWORK_MODE"
+    fi
     if [ -n "${LAUNCH_PORTS}" ]; then
-      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_PORTS"
+      _echo "WARNING! LAUNCH_HOST_NETWORK or LAUNCH_NETWORK_MODE is set. Ignoring LAUNCH_PORTS"
     fi
     if [ -n "${LAUNCH_NETWORKS}" ]; then
-      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_NETWORKS"
+      _echo "WARNING! LAUNCH_HOST_NETWORK or LAUNCH_NETWORK_MODE is set. Ignoring LAUNCH_NETWORKS"
     fi
     if [ -n "${LAUNCH_EXT_NETWORKS}" ]; then
-      _echo "WARNING! LAUNCH_HOST_NETWORK is set. Ignoring LAUNCH_EXT_NETWORKS"
+      _echo "WARNING! LAUNCH_HOST_NETWORK or LAUNCH_NETWORK_MODE is set. Ignoring LAUNCH_EXT_NETWORKS"
     fi
   else
     # Check if the networks are attachable
@@ -84,6 +87,7 @@ if [ -f "${COMPOSE_FILE}" ]; then
     'LAUNCH_HOST_NETWORK'
     'LAUNCH_PORTS'
     'LAUNCH_NETWORKS'
+    'LAUNCH_NETWORK_MODE'
     'LAUNCH_EXT_NETWORKS'
     'LAUNCH_EXT_NETWORKS_IPV4'
     'LAUNCH_EXT_NETWORKS_IPV6'
@@ -290,6 +294,8 @@ xEOF
   # run on the host network - it's incompatible with ports or with named networks
   if [ "${LAUNCH_HOST_NETWORK}" = true ]; then
     echo "    network_mode: host" >> "${COMPOSE_FILE}"
+  elif [ -n "${LAUNCH_NETWORK_MODE}" ]; then
+    echo "    network_mode: ${LAUNCH_NETWORK_MODE}" >>"${COMPOSE_FILE}"
   else
     if [ -n "${LAUNCH_PORTS}" ]; then
       echo "    ports:" >> "${COMPOSE_FILE}"
@@ -460,4 +466,3 @@ COMMAND=(
 docker compose "${COMMAND[@]}" & wait $!
 
 _cleanup
-
