@@ -7,7 +7,9 @@ if [ "${DEBUG}" == 'true' ]; then
 fi
 
 _term() {
+  # shellcheck disable=SC2317
   _echo "Caught SIGTERM signal!"
+  # shellcheck disable=SC2317
   _cleanup
 }
 
@@ -95,6 +97,7 @@ if [ -f "${COMPOSE_FILE}" ]; then
     'LAUNCH_CAP_ADD'
     'LAUNCH_CAP_DROP'
     'LAUNCH_SECURITY_OPT'
+    'LAUNCH_SHM_SIZE'
     'LAUNCH_LABELS'
     'LAUNCH_PULL'
     'LAUNCH_SYSCTLS'
@@ -289,6 +292,11 @@ xEOF
   # Specific Mac Address for the container
   if [ -n "${LAUNCH_MAC_ADDRESS}" ]; then
     echo "    mac_address: ${LAUNCH_MAC_ADDRESS}" >> "${COMPOSE_FILE}"
+  fi
+
+  # SHM size
+  if [ -n "${LAUNCH_SHM_SIZE}" ]; then
+    echo "    shm_size: '${LAUNCH_SHM_SIZE}'" >> "${COMPOSE_FILE}"
   fi
 
   # run on the host network - it's incompatible with ports or with named networks

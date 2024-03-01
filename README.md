@@ -71,6 +71,7 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_LABELS`         | `ai.ix.started-by=ix.ai/swarm-launcher` | NO | Space separated list of Label=Value pairs |
 | `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 | `LAUNCH_SYSCTLS`        | -                          | NO            | Space separated list of sysctl=value |
+| `LAUNCH_SHM_SIZE`       | -                          | NO            | Single value for the container SHM size. If omitted and not changed on a daemon level, all containers start with `67108864` (64 MB) |
 | `LAUNCH_COMMAND`        | -                          | NO            | A string that overrides the default command |
 | `LAUNCH_CGROUP_PARENT`  | -                          | NO            | A string that specify the parent cgroup for the container |
 | `LAUNCH_STOP_GRACE_PERIOD` | `10s` (by docker)       | NO            | Allows to override the default [stop_grace_period](https://docs.docker.com/compose/compose-file/#stop_grace_period). **Note**: It makes sense to also add a slightly higher `stop_grace_period` to the `swarm-launcher` stack as well! |
