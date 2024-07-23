@@ -1,5 +1,5 @@
 # Multi-arch docker-compose image
-FROM alpine:latest
+FROM alpine:3.20.1
 LABEL maintainer="docker@ix.ai"\
       ai.ix.repository="ix.ai/swarm-launcher"\
       org.opencontianers.image.description="A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode"
