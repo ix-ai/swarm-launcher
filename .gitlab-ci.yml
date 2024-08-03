@@ -20,12 +20,12 @@ include:
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: Jobs/Container-Scanning.gitlab-ci.yml
 
-container_scanning:
-  variables:
-    GIT_STRATEGY: fetch
-  script:
-    - !reference [.set-image-tag]
-    - export CS_IMAGE="${CI_REGISTRY_IMAGE}:${TAG}"
-    - gtcs scan
-  stage: .post
+#container_scanning:
+#  variables:
+#    GIT_STRATEGY: fetch
+#  script:
+#    - !reference [.set-image-tag]
+#    - export CS_IMAGE="${CI_REGISTRY_IMAGE}:${TAG}"
+#    - gtcs scan
+#  stage: .post
 
