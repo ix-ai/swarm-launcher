@@ -3,7 +3,6 @@
 # Secret Detection customization: https://docs.gitlab.com/ee/user/application_security/secret_detection/pipeline/#customization
 # Dependency Scanning customization: https://docs.gitlab.com/ee/user/application_security/dependency_scanning/#customizing-the-dependency-scanning-settings
 # Container Scanning customization: https://docs.gitlab.com/ee/user/application_security/container_scanning/#customizing-the-container-scanning-settings
-
 variables:
   DOCKERHUB_REPO_NAME: swarm-launcher
   GITHUB_REPO_NAME: ix-ai/swarm-launcher
@@ -15,17 +14,21 @@ variables:
   ENABLE_386: 'true'
 
 include:
-  - project: 'ix.ai/ci-templates'
-    file: '/bash-project.yml'
+  - project: ix.ai/ci-templates
+    file: "/bash-project.yml"
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: Jobs/Container-Scanning.gitlab-ci.yml
+  - template: Security/SAST.gitlab-ci.yml
 
-#container_scanning:
-#  variables:
-#    GIT_STRATEGY: fetch
-#  script:
-#    - !reference [.set-image-tag]
-#    - export CS_IMAGE="${CI_REGISTRY_IMAGE}:${TAG}"
-#    - gtcs scan
-#  stage: .post
+sast:
+  stage: test
+
+container_scanning:
+  variables:
+    GIT_STRATEGY: fetch
+  script:
+    - !reference [.set-image-tag]
+    - export CS_IMAGE="${CI_REGISTRY_IMAGE}:${TAG}"
+    - gtcs scan
+  stage: .post
 
