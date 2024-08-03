@@ -17,12 +17,8 @@ variables:
 include:
   - project: 'ix.ai/ci-templates'
     file: '/bash-project.yml'
-  - template: Security/SAST.gitlab-ci.yml
   - template: Dependency-Scanning.gitlab-ci.yml
   - template: Jobs/Container-Scanning.gitlab-ci.yml
-
-sast:
-  stage: test
 
 container_scanning:
   variables:
