@@ -6,7 +6,7 @@
 variables:
   DOCKERHUB_REPO_NAME: swarm-launcher
   GITHUB_REPO_NAME: ix-ai/swarm-launcher
-  ENABLE_CACHE: 'false'
+  ENABLE_CACHE: 'true'
   ENABLE_AMD64: 'true'
   ENABLE_ARM64: 'true'
   ENABLE_ARMv7: 'true'
