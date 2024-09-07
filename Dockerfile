@@ -9,7 +9,7 @@ LABEL maintainer="docker@ix.ai" \
 # renovate: datasource=repology depName=alpine_3_20/bash
 ARG BASH_VERSION="5.2.26-r0"
 # renovate: datasource=repology depName=alpine_3_20/curl
-ARG CURL_VERSION="8.9.0-r0"
+ARG CURL_VERSION="8.9.1-r1"
 # renovate: datasource=repology depName=alpine_3_20/jq
 ARG JQ_VERSION="1.7.1-r0"
 # renovate: datasource=repology depName=alpine_3_20/docker-cli-compose
