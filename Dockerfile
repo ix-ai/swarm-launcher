@@ -1,5 +1,5 @@
 # Multi-arch swarm-launcher image, using docker-compose
-FROM alpine:3.20.2@sha256:0a4eaa0eecf5f8c050e5bba433f58c052be7587ee8af3e8b3910ef9ab5fbe9f5
+FROM alpine:3.20.3@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367effd16dc0d06d
 
 LABEL maintainer="docker@ix.ai" \
       ai.ix.repository="ix.ai/swarm-launcher" \
@@ -9,7 +9,7 @@ LABEL maintainer="docker@ix.ai" \
 # renovate: datasource=repology depName=alpine_3_20/bash
 ARG BASH_VERSION="5.2.26-r0"
 # renovate: datasource=repology depName=alpine_3_20/curl
-ARG CURL_VERSION="8.9.0-r0"
+ARG CURL_VERSION="8.9.1-r1"
 # renovate: datasource=repology depName=alpine_3_20/jq
 ARG JQ_VERSION="1.7.1-r0"
 # renovate: datasource=repology depName=alpine_3_20/docker-cli-compose
