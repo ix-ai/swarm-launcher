@@ -4,7 +4,7 @@ FROM alpine:3.20.3@sha256:beefdbd8a1da6d2915566fde36db9db0b524eb737fc57cd1367eff
 LABEL maintainer="docker@ix.ai" \
       ai.ix.repository="ix.ai/swarm-launcher" \
       org.opencontianers.image.description="A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode" \
-      org.opencontainers.image.source="https://ix.ai/swarm-launcher"
+      org.opencontainers.image.source="https://gitlab.com/ix.ai/swarm-launcher"
 
 # renovate: datasource=repology depName=alpine_3_20/bash
 ARG BASH_VERSION="5.2.26-r0"
