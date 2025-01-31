@@ -75,9 +75,7 @@ CREATE_COMPOSE_FILE=true
 if [ -f "${COMPOSE_FILE}" ]; then
   _echo "Detected mounted docker-compose.yml file"
 
-  LAUNCH_VARIABLES=(
-    'LAUNCH_IMAGE'
-    'LAUNCH_PROJECT_NAME'
+  LAUNCH_VARIABLES_IGNORED=(
     'LAUNCH_SERVICE_NAME'
     'LAUNCH_CONTAINER_NAME'
     'LAUNCH_PRIVILEGED'
@@ -99,7 +97,6 @@ if [ -f "${COMPOSE_FILE}" ]; then
     'LAUNCH_SECURITY_OPT'
     'LAUNCH_SHM_SIZE'
     'LAUNCH_LABELS'
-    'LAUNCH_PULL'
     'LAUNCH_SYSCTLS'
     'LAUNCH_COMMAND'
     'LAUNCH_CGROUP_PARENT'
@@ -110,7 +107,8 @@ if [ -f "${COMPOSE_FILE}" ]; then
     'LAUNCH_DNS'
     'LAUNCH_DNS_SEARCH'
   )
-  for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES[@]}"; do
+
+  for LAUNCH_VARIABLE in "${LAUNCH_VARIABLES_IGNORED[@]}"; do
     if [ -n "${!LAUNCH_VARIABLE}" ]; then
       _echo "WARNING: ${LAUNCH_VARIABLE} is set, but a docker-compose.yml file has been provided. ${LAUNCH_VARIABLE} will be ignored!"
     fi
@@ -137,8 +135,6 @@ if [ "${CREATE_COMPOSE_FILE}" == "true" ]; then
   fi
 
   cat <<xEOF > "${COMPOSE_FILE}"
-version: "3.8"
-
 services:
   "${LAUNCH_SERVICE_NAME}":
     image: "${LAUNCH_IMAGE}"

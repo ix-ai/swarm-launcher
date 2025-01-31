@@ -3,7 +3,6 @@
 [![Pipeline Status](https://gitlab.com/ix.ai/swarm-launcher/badges/master/pipeline.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
 [![Docker Stars](https://img.shields.io/docker/stars/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
-[![Docker Image Version (latest)](https://img.shields.io/docker/v/ixdotai/swarm-launcher)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
 [![Gitlab Project](https://img.shields.io/badge/GitLab-Project-554488.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
 
 A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode
@@ -45,12 +44,17 @@ The following environment variables are important, if you plan on using a privat
 | `LOGIN_PASSWORD_FILE` |
 | `LOGIN_REGISTRY`      |
 
+These variables are always used, if set:
+| **Variable**            | **Default**                | **Mandatory** | **Description**                                 |
+| `LAUNCH_PROJECT_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the project (similar to the stack name) |
+| `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
+| `LAUNCH_IMAGE`          | -                          | **YES**       | The image for the container. Mandatory in the following two circumstances: no `/docker-compose.yml` file supplied or `LAUNCH_PULL` is set to `true` |
+| `LAUNCH_ARG_ENVFILE`    | -                          | NO            | The path inside the `swarm-launcher` container with the [`env` file](https://docs.docker.com/compose/environment-variables/) used by `docker compose --env-file XXX up` |
+
 The following environment variables are important if you don't supply a `/docker-compose.yml` file in the swarm-launcher container:
 
 | **Variable**            | **Default**                | **Mandatory** | **Description**                                 |
 |:------------------------|:--------------------------:|:-------------:|:------------------------------------------------|
-| `LAUNCH_IMAGE`          | -                          | **YES**       | The image for the container |
-| `LAUNCH_PROJECT_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the project (similar to the stack name) |
 | `LAUNCH_SERVICE_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the service |
 | `LAUNCH_CONTAINER_NAME` | random (by docker)         | NO            | If you want to use a specific name for the container (similar to the task name) |
 | `LAUNCH_HOSTNAME`       | -                          | NO            | If you want to use a specific hostname for the container |
@@ -69,7 +73,6 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_CAP_DROP`       | -                          | NO            | Space separated list of capabilities to drop |
 | `LAUNCH_SECURITY_OPT`   | -                          | NO            | Space separated list of security options to add |
 | `LAUNCH_LABELS`         | `ai.ix.started-by=ix.ai/swarm-launcher` | NO | Space separated list of Label=Value pairs |
-| `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 | `LAUNCH_SYSCTLS`        | -                          | NO            | Space separated list of sysctl=value |
 | `LAUNCH_SHM_SIZE`       | -                          | NO            | Single value for the container SHM size. If omitted and not changed on a daemon level, all containers start with `67108864` (64 MB) |
 | `LAUNCH_COMMAND`        | -                          | NO            | A string that overrides the default command |
@@ -81,9 +84,8 @@ The following environment variables are important if you don't supply a `/docker
 | `LAUNCH_DNS`            | -                          | NO            | Space separated list of DNS servers |
 | `LAUNCH_DNS_SEARCH`     | -                          | NO            | Space separated list of DNS search domains |
 | `LAUNCH_MAC_ADDRESS`    | -                          | NO            | Valid mac address for the launched container |
-| `LAUNCH_ENVIRONMENTS`   | -                          | NO            | Space separated list of Key=Value pairs. **Note**: `@_@` gets replaced with a single whitespace, so you can expose environment values containing spaces. |
-| `LAUNCH_ENVFILES`       | -                          | NO            | Space separated list of Key=Value pairs. **Note**: These files *must* be present on the host where the container is started|
-| `LAUNCH_ARG_ENVFILE`    | -                          | NO            | The path inside the `swarm-launcher` container with the [`env` file](https://docs.docker.com/compose/environment-variables/) used by `docker compose --env-file XXX up` |
+| `LAUNCH_ENVIRONMENTS`   | -                          | NO            | Space separated list of Key=Value pairs. **Note**: `@_@` gets replaced with a single whitespace, so you can expose environment values containing spaces |
+| `LAUNCH_ENVFILES`       | -                          | NO            | Space separated list of Key=Value pairs. **Note**: These files *must* be present on the host where the container is started |
 
 **Note**: Make sure you check out the [documentation](docs/).
 
