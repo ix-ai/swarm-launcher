@@ -45,7 +45,9 @@ The following environment variables are important, if you plan on using a privat
 | `LOGIN_REGISTRY`      |
 
 These variables are always used, if set:
+
 | **Variable**            | **Default**                | **Mandatory** | **Description**                                 |
+|:------------------------|:--------------------------:|:-------------:|:------------------------------------------------|
 | `LAUNCH_PROJECT_NAME`   | random (by swarm-launcher) | NO            | If you want to use a specific name for the project (similar to the stack name) |
 | `LAUNCH_PULL`           | `false`                    | NO            | Set this to `true` to check at every container start for the latest image version |
 | `LAUNCH_IMAGE`          | -                          | **YES**       | The image for the container. Mandatory in the following two circumstances: no `/docker-compose.yml` file supplied or `LAUNCH_PULL` is set to `true` |
