@@ -9,11 +9,11 @@ LABEL maintainer="docker@ix.ai" \
 # renovate: datasource=repology depName=alpine_3_21/bash versioning=loose
 ARG BASH_VERSION="5.2.37-r0"
 # renovate: datasource=repology depName=alpine_3_21/curl versioning=loose
-ARG CURL_VERSION="8.12.0-r0"
+ARG CURL_VERSION="8.12.1-r0"
 # renovate: datasource=repology depName=alpine_3_21/jq versioning=loose
 ARG JQ_VERSION="1.7.1-r0"
 # renovate: datasource=repology depName=alpine_3_21/docker-cli-compose versioning=loose
-ARG DOCKER_CLI_COMPOSE_VERSION="2.31.0-r1"
+ARG DOCKER_CLI_COMPOSE_VERSION="2.31.0-r2"
 
 RUN apk add --no-cache \
     bash="${BASH_VERSION}" \
