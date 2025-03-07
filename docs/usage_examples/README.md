@@ -3,6 +3,7 @@
 | **Documentation** |
 |-------------------|
 | [GitLab Runner](gitlab-runner.md) |
+| [Gluetun and Plex](gluetun.md) |
 
 ## Blog articles
 
