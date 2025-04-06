@@ -1,10 +1,10 @@
 # Multi-arch swarm-launcher image, using docker-compose
 FROM public.ecr.aws/docker/library/alpine:3.21.3@sha256:a8560b36e8b8210634f77d9f7f9efd7ffa463e380b75e2e74aff4511df3ef88c
 
-LABEL maintainer="docker@ix.ai" \
-      ai.ix.repository="ix.ai/swarm-launcher" \
+LABEL org.opencontainers.image.authors="swarm-launcher@docker.egos.tech" \
       org.opencontianers.image.description="A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode" \
-      org.opencontainers.image.source="https://gitlab.com/ix.ai/swarm-launcher"
+      org.opencontainers.image.source="https://gitlab.com/ix.ai/swarm-launcher" \
+      org.opencontainers.image.url="egos.tech/swarm-launcher"
 
 # renovate: datasource=repology depName=alpine_3_21/bash versioning=loose
 ARG BASH_VERSION="5.2.37-r0"

@@ -1,8 +1,6 @@
 # swarm-launcher
 
 [![Pipeline Status](https://gitlab.com/ix.ai/swarm-launcher/badges/master/pipeline.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
-[![Docker Stars](https://img.shields.io/docker/stars/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
-[![Docker Pulls](https://img.shields.io/docker/pulls/ixdotai/swarm-launcher.svg)](https://hub.docker.com/r/ixdotai/swarm-launcher/)
 [![Gitlab Project](https://img.shields.io/badge/GitLab-Project-554488.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
 
 A docker image to allow the launch of container in docker swarm, with options normally unavailable to swarm mode
