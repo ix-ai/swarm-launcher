@@ -13,7 +13,7 @@ ARG CURL_VERSION="8.12.1-r1"
 # renovate: datasource=repology depName=alpine_3_21/jq versioning=loose
 ARG JQ_VERSION="1.7.1-r0"
 # renovate: datasource=repology depName=alpine_3_21/docker-cli-compose versioning=loose
-ARG DOCKER_CLI_COMPOSE_VERSION="2.31.0-r3"
+ARG DOCKER_CLI_COMPOSE_VERSION="2.31.0-r4"
 
 RUN apk add --no-cache \
     bash="${BASH_VERSION}" \
