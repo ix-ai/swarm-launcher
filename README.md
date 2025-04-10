@@ -1,5 +1,23 @@
 # swarm-launcher
 
+## Deprecation Notice
+
+**This project is deprecated and has been archived**. Please switch to [gitlab.com/egos-tech/swarm-launcher](https://gitlab.com/egos-tech/swarm-launcher).
+
+Replace your docker image with `registry.gitlab.com/egos-tech/swarm-launcher:latest`.
+
+Please note, a new versioning format is established, starting with `1.0.0` - this version is one-to-one compatible with the latest version in this repository:
+
+```yml
+image: registry.gitlab.com/egos-tech/swarm-launcher:1.0.0
+```
+
+The only exception is the label for the spawned service: `tech.egos.started-by=egos.tech/swarm-launcher` instead of `ai.ix.started-by=ix.ai/swarm-launcher`.
+
+All future updates will only be done to that project.
+
+## Description
+
 [![Pipeline Status](https://gitlab.com/ix.ai/swarm-launcher/badges/master/pipeline.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
 [![Gitlab Project](https://img.shields.io/badge/GitLab-Project-554488.svg)](https://gitlab.com/ix.ai/swarm-launcher/)
 
